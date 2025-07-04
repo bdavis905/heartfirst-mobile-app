@@ -322,8 +322,7 @@ Last Updated: January 2025`;
           <ScrollView
             style={{ 
               flex: 1, 
-              paddingHorizontal: 24,
-              height: 350
+              paddingHorizontal: 24
             }}
             onScroll={handleScroll}
             scrollEventThrottle={16}
@@ -331,9 +330,20 @@ Last Updated: January 2025`;
           >
             <View style={{ paddingTop: 24, paddingBottom: 80 }}>
               <Text style={{
+                fontSize: 18,
+                lineHeight: 24,
+                color: '#E74C3C',
+                marginBottom: 24,
+                textAlign: 'center',
+                fontWeight: 'bold'
+              }}>
+                TEST: CAN YOU SEE THIS TEXT?
+              </Text>
+              
+              <Text style={{
                 fontSize: 16,
                 lineHeight: 24,
-                color: '#7F8C8D',
+                color: '#2C3E50',
                 marginBottom: 24,
                 textAlign: 'center'
               }}>
