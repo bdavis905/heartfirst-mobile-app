@@ -36,6 +36,13 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
         useNativeDriver: true,
       }),
     ]).start();
+
+    // Auto-enable button after 3 seconds for better UX
+    const timer = setTimeout(() => {
+      setIsBottomReached(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -51,11 +58,14 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
 
   const handleScroll = (event: any) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-    const progress = contentOffset.y / (contentSize.height - layoutMeasurement.height);
-    setScrollProgress(Math.min(progress, 1));
     
-    // Check if user reached bottom
-    if (progress >= 0.95) {
+    // More reliable progress calculation
+    const maxScroll = Math.max(0, contentSize.height - layoutMeasurement.height);
+    const progress = maxScroll > 0 ? contentOffset.y / maxScroll : 1;
+    setScrollProgress(Math.min(Math.max(progress, 0), 1));
+    
+    // Check if user reached bottom or content doesn't need scrolling
+    if (progress >= 0.8 || maxScroll <= 10) {
       setIsBottomReached(true);
     }
   };
@@ -246,12 +256,10 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
               <Pressable
                 onPress={handleAccept}
                 disabled={!isBottomReached}
-                className={`rounded-28dp h-56dp items-center justify-center ${
-                  isBottomReached 
-                    ? 'bg-primary-green' 
-                    : 'bg-background-tertiary'
-                }`}
+                className="rounded-full items-center justify-center"
                 style={{
+                  height: 56,
+                  backgroundColor: isBottomReached ? '#16A085' : '#ECF0F1',
                   shadowColor: isBottomReached ? '#16A085' : 'transparent',
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.15,
@@ -259,17 +267,31 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
                   elevation: isBottomReached ? 8 : 0,
                 }}
               >
-                <Text className={`text-button font-semibold ${
-                  isBottomReached ? 'text-primary-white' : 'text-text-tertiary'
-                }`}>
+                <Text 
+                  className="font-semibold"
+                  style={{
+                    color: isBottomReached ? '#FFFFFF' : '#95A5A6',
+                    fontSize: 17,
+                    lineHeight: 24,
+                    letterSpacing: 0.1,
+                  }}
+                >
                   I Understand
                 </Text>
               </Pressable>
             </Animated.View>
             
             {!isBottomReached && (
-              <Text className="text-caption font-medium text-text-tertiary text-center mt-8dp">
-                Scroll to the bottom to continue
+              <Text 
+                className="text-center mt-2"
+                style={{
+                  color: '#95A5A6',
+                  fontSize: 12,
+                  lineHeight: 16,
+                  letterSpacing: 0.2,
+                }}
+              >
+                Please read the information above (button enables automatically)
               </Text>
             )}
           </View>
