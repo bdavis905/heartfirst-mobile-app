@@ -108,7 +108,7 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
       </View>
 
       <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 32, justifyContent: 'center' }}>
-        <View style={{ gap: 24 }}>
+        <View style={{ flexDirection: 'column' }}>
           {/* Barcode Scanner */}
           <Pressable
             onPress={() => handleScanTypeSelect('barcode')}
@@ -121,7 +121,8 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
               elevation: 8,
               borderRadius: 24,
               padding: 32,
-              transform: [{ scale: pressed ? 0.95 : 1 }]
+              transform: [{ scale: pressed ? 0.95 : 1 }],
+              marginBottom: 24
             })}
           >
             <View style={{ alignItems: 'center' }}>
@@ -147,7 +148,8 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
               elevation: 8,
               borderRadius: 24,
               padding: 32,
-              transform: [{ scale: pressed ? 0.95 : 1 }]
+              transform: [{ scale: pressed ? 0.95 : 1 }],
+              marginBottom: 24
             })}
           >
             <View style={{ alignItems: 'center' }}>
@@ -173,7 +175,8 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
               elevation: 8,
               borderRadius: 24,
               padding: 32,
-              transform: [{ scale: pressed ? 0.95 : 1 }]
+              transform: [{ scale: pressed ? 0.95 : 1 }],
+              marginBottom: 24
             })}
           >
             <View style={{ alignItems: 'center' }}>
