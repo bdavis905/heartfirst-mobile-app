@@ -38,7 +38,7 @@ export default function SubscriptionScreen({ onBack, onSubscribe }: Subscription
   };
 
   return (
-    <View className="flex-1 bg-gradient-to-b from-blue-50 to-white">
+    <View className="flex-1 bg-slate-900">
       <View style={{ paddingTop: insets.top }} className="bg-white border-b border-gray-200">
         <View className="flex-row items-center justify-between px-6 py-4">
           <Pressable onPress={handleBack} className="flex-row items-center">
@@ -56,10 +56,10 @@ export default function SubscriptionScreen({ onBack, onSubscribe }: Subscription
           <View className="w-20 h-20 bg-blue-100 rounded-full items-center justify-center mb-4">
             <Ionicons name="camera" size={40} color="#3b82f6" />
           </View>
-          <Text className="text-2xl font-bold text-gray-800 text-center mb-2">
+          <Text className="text-2xl font-bold text-white text-center mb-2">
             You've used all {maxFreeScans} free scans!
           </Text>
-          <Text className="text-gray-600 text-center">
+          <Text className="text-gray-300 text-center">
             Upgrade to Premium to continue analyzing food items and get unlimited access to Dr. Esselstyn's protocol guidance.
           </Text>
         </View>
@@ -134,7 +134,7 @@ export default function SubscriptionScreen({ onBack, onSubscribe }: Subscription
         </Pressable>
 
         {/* Fine Print */}
-        <Text className="text-gray-500 text-center text-xs leading-relaxed mb-8">
+        <Text className="text-gray-400 text-center text-xs leading-relaxed mb-8">
           By subscribing, you agree to our Terms of Service and Privacy Policy. 
           Subscription will auto-renew monthly unless cancelled. 
           Cancel anytime in your device settings.
@@ -143,9 +143,9 @@ export default function SubscriptionScreen({ onBack, onSubscribe }: Subscription
         {/* Reset Button (for testing) */}
         <Pressable
           onPress={handleReset}
-          className="border border-gray-300 rounded-xl py-3 px-6 mb-4"
+          className="border border-gray-600 rounded-xl py-3 px-6 mb-4"
         >
-          <Text className="text-gray-600 font-medium text-center text-sm">
+          <Text className="text-gray-400 font-medium text-center text-sm">
             Reset App (Testing Only)
           </Text>
         </Pressable>
