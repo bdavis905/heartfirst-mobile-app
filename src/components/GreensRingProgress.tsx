@@ -47,7 +47,7 @@ export default function GreensRingProgress({
           }}
         />
 
-        {/* Progress Circle - Show precise segments */}
+        {/* Progress Circle - Simple percentage-based arc */}
         {completed > 0 && (
           <View
             style={{
@@ -58,26 +58,32 @@ export default function GreensRingProgress({
               transform: [{ rotate: '-90deg' }],
             }}
           >
-            {/* Segment 1 (0-60 degrees) */}
-            {completed >= 1 && (
-              <View
-                style={{
-                  position: 'absolute',
-                  width: progressCircleSize,
-                  height: progressCircleSize,
-                  borderRadius: progressCircleSize / 2,
-                  borderWidth: strokeWidth,
-                  borderColor: 'transparent',
-                  borderTopColor: ringColor,
-                  borderRightColor: 'transparent',
-                  borderBottomColor: 'transparent',
-                  borderLeftColor: 'transparent',
-                  transform: [{ rotate: '0deg' }],
-                }}
-              />
-            )}
+            {/* 
+              Use a simple approach: show borders based on percentage ranges
+              1 serving = 16.67% (show partial top)
+              2 servings = 33.33% (show top + partial right)
+              3 servings = 50% (show top + right)
+              4 servings = 66.67% (show top + right + partial bottom)
+              5 servings = 83.33% (show top + right + bottom)
+              6 servings = 100% (show all)
+            */}
+            
+            {/* Always show top border for any progress */}
+            <View
+              style={{
+                position: 'absolute',
+                width: progressCircleSize,
+                height: progressCircleSize,
+                borderRadius: progressCircleSize / 2,
+                borderWidth: strokeWidth,
+                borderColor: 'transparent',
+                borderTopColor: ringColor,
+                // Reduce opacity if we're at exactly 1 serving
+                opacity: completed === 1 ? 0.6 : 1,
+              }}
+            />
 
-            {/* Segment 2 (60-120 degrees) */}
+            {/* Show right border for 2+ servings */}
             {completed >= 2 && (
               <View
                 style={{
@@ -87,16 +93,13 @@ export default function GreensRingProgress({
                   borderRadius: progressCircleSize / 2,
                   borderWidth: strokeWidth,
                   borderColor: 'transparent',
-                  borderTopColor: 'transparent',
                   borderRightColor: ringColor,
-                  borderBottomColor: 'transparent',
-                  borderLeftColor: 'transparent',
-                  transform: [{ rotate: '0deg' }],
+                  opacity: completed === 2 ? 0.6 : 1,
                 }}
               />
             )}
 
-            {/* Segment 3 (120-180 degrees) */}
+            {/* Show bottom border for 3+ servings */}
             {completed >= 3 && (
               <View
                 style={{
@@ -106,16 +109,13 @@ export default function GreensRingProgress({
                   borderRadius: progressCircleSize / 2,
                   borderWidth: strokeWidth,
                   borderColor: 'transparent',
-                  borderTopColor: 'transparent',
-                  borderRightColor: 'transparent',
                   borderBottomColor: ringColor,
-                  borderLeftColor: 'transparent',
-                  transform: [{ rotate: '0deg' }],
+                  opacity: completed === 3 ? 0.6 : 1,
                 }}
               />
             )}
 
-            {/* Segment 4 (180-240 degrees) */}
+            {/* Show left border for 4+ servings */}
             {completed >= 4 && (
               <View
                 style={{
@@ -125,48 +125,26 @@ export default function GreensRingProgress({
                   borderRadius: progressCircleSize / 2,
                   borderWidth: strokeWidth,
                   borderColor: 'transparent',
-                  borderTopColor: 'transparent',
-                  borderRightColor: 'transparent',
-                  borderBottomColor: 'transparent',
                   borderLeftColor: ringColor,
-                  transform: [{ rotate: '0deg' }],
+                  opacity: completed === 4 ? 0.6 : 1,
                 }}
               />
             )}
 
-            {/* Segments 5 & 6 - Split the remaining 120 degrees */}
-            {completed >= 5 && (
+            {/* For 5 servings, add a subtle additional indicator */}
+            {completed === 5 && (
               <View
                 style={{
                   position: 'absolute',
-                  width: progressCircleSize,
-                  height: progressCircleSize,
-                  borderRadius: progressCircleSize / 2,
-                  borderWidth: strokeWidth,
+                  width: progressCircleSize * 0.9,
+                  height: progressCircleSize * 0.9,
+                  borderRadius: (progressCircleSize * 0.9) / 2,
+                  borderWidth: strokeWidth / 4,
                   borderColor: 'transparent',
                   borderTopColor: ringColor,
-                  borderRightColor: 'transparent',
-                  borderBottomColor: 'transparent',
-                  borderLeftColor: 'transparent',
-                  transform: [{ rotate: '240deg' }], // Start at 240 degrees
-                }}
-              />
-            )}
-
-            {completed >= 6 && (
-              <View
-                style={{
-                  position: 'absolute',
-                  width: progressCircleSize,
-                  height: progressCircleSize,
-                  borderRadius: progressCircleSize / 2,
-                  borderWidth: strokeWidth,
-                  borderColor: 'transparent',
-                  borderTopColor: 'transparent',
-                  borderRightColor: ringColor,
-                  borderBottomColor: 'transparent',
-                  borderLeftColor: 'transparent',
-                  transform: [{ rotate: '240deg' }], // Complete the final segment
+                  top: strokeWidth / 2,
+                  left: strokeWidth / 2,
+                  opacity: 0.5,
                 }}
               />
             )}
