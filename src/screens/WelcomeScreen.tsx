@@ -3,6 +3,7 @@ import { View, Text, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { useSubscriptionStore } from '../state/subscriptionStore';
 
 export type ScanType = 'barcode' | 'food_label' | 'restaurant_menu';
 
@@ -12,11 +13,15 @@ interface WelcomeScreenProps {
 
 export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) {
   const insets = useSafeAreaInsets();
+  const { isSubscribed, getRemainingScans, getSubscriptionStatus } = useSubscriptionStore();
 
   const handleScanTypeSelect = async (type: ScanType) => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onScanTypeSelect(type);
   };
+
+  const remainingScans = getRemainingScans();
+  const subscriptionStatus = getSubscriptionStatus();
 
   return (
     <View className="flex-1 bg-slate-50">
@@ -28,6 +33,29 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
           <Text className="text-gray-600 text-center mt-2">
             Choose what you'd like to scan
           </Text>
+          
+          {/* Subscription Status */}
+          <View className="mt-4 items-center">
+            {isSubscribed ? (
+              <View className="bg-green-100 rounded-full px-4 py-2">
+                <Text className="text-green-800 font-medium text-sm">
+                  Premium • {remainingScans} scans left this month
+                </Text>
+              </View>
+            ) : subscriptionStatus === 'expired' ? (
+              <View className="bg-red-100 rounded-full px-4 py-2">
+                <Text className="text-red-800 font-medium text-sm">
+                  Free trial expired • Upgrade to continue
+                </Text>
+              </View>
+            ) : (
+              <View className="bg-blue-100 rounded-full px-4 py-2">
+                <Text className="text-blue-800 font-medium text-sm">
+                  Free trial • {remainingScans} scans remaining
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
       </View>
 

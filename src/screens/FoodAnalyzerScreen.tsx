@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { cn } from '../utils/cn';
 import { ScanType } from './WelcomeScreen';
+import { useSubscriptionStore } from '../state/subscriptionStore';
 
 type AnalysisResult = {
   status: 'compliant' | 'not_compliant' | 'caution';
@@ -17,9 +18,10 @@ type AnalysisResult = {
 interface FoodAnalyzerScreenProps {
   scanType: ScanType;
   onBack: () => void;
+  onSubscriptionRequired: () => void;
 }
 
-export default function FoodAnalyzerScreen({ scanType, onBack }: FoodAnalyzerScreenProps) {
+export default function FoodAnalyzerScreen({ scanType, onBack, onSubscriptionRequired }: FoodAnalyzerScreenProps) {
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -27,6 +29,15 @@ export default function FoodAnalyzerScreen({ scanType, onBack }: FoodAnalyzerScr
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const cameraRef = useRef<CameraViewRef>(null);
   const insets = useSafeAreaInsets();
+  
+  const { 
+    useScan, 
+    getRemainingScans, 
+    getSubscriptionStatus,
+    isSubscribed,
+    maxFreeScans,
+    freeScansUsed 
+  } = useSubscriptionStore();
 
   if (!permission) {
     return <View className="flex-1 bg-slate-50" />;
@@ -60,6 +71,14 @@ export default function FoodAnalyzerScreen({ scanType, onBack }: FoodAnalyzerScr
 
   const capturePhoto = async () => {
     if (!cameraRef.current) return;
+
+    // Check if scan is allowed
+    const canScan = useScan();
+    if (!canScan) {
+      // Show subscription screen
+      onSubscriptionRequired();
+      return;
+    }
 
     try {
       // Haptic feedback for photo capture
@@ -348,6 +367,18 @@ export default function FoodAnalyzerScreen({ scanType, onBack }: FoodAnalyzerScr
               <Pressable onPress={toggleCameraFacing} className="w-12 h-12 items-center justify-center">
                 <Ionicons name="camera-reverse" size={24} color="white" />
               </Pressable>
+            </View>
+            
+            {/* Scan Counter */}
+            <View className="mx-6 mb-4">
+              <View className="bg-black/60 rounded-full px-4 py-2 self-center">
+                <Text className="text-white text-sm font-medium">
+                  {isSubscribed ? 
+                    `${getRemainingScans()} scans left this month` : 
+                    `${getRemainingScans()} free scans left`
+                  }
+                </Text>
+              </View>
             </View>
           </View>
 
