@@ -108,9 +108,7 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
       </View>
 
       <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 20 }}>
-        <Text style={{ color: 'red', fontSize: 16, textAlign: 'center', marginBottom: 20 }}>
-          DEBUG: Scan Options Should Appear Below
-        </Text>
+
         <View style={{ flexDirection: 'column', paddingTop: 20 }}>
           {/* Barcode Scanner */}
           <Pressable
