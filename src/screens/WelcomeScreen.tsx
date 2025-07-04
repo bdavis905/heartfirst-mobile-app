@@ -108,30 +108,40 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
       </View>
 
       <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 20 }}>
+        <Text style={{ color: 'red', fontSize: 16, textAlign: 'center', marginBottom: 20 }}>
+          DEBUG: Scan Options Should Appear Below
+        </Text>
         <View style={{ flexDirection: 'column', paddingTop: 20 }}>
           {/* Barcode Scanner */}
           <Pressable
             onPress={() => handleScanTypeSelect('barcode')}
-            style={({ pressed }) => ({
+            style={{
               backgroundColor: '#FF6B6B',
-              shadowColor: '#FF6B6B',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.15,
-              shadowRadius: 12,
-              elevation: 8,
               borderRadius: 20,
               padding: 24,
-              transform: [{ scale: pressed ? 0.95 : 1 }],
               marginBottom: 16,
-              minHeight: 120
-            })}
+              minHeight: 120,
+            }}
           >
             <View style={{ alignItems: 'center' }}>
               <Ionicons name="barcode-outline" size={48} color="white" />
-              <Text style={{ color: 'white', fontWeight: '700', fontSize: 18, lineHeight: 22, marginTop: 12 }}>
+              <Text style={{
+                color: 'white',
+                fontWeight: '700',
+                fontSize: 18,
+                lineHeight: 22,
+                marginTop: 12,
+                textAlign: 'center'
+              }}>
                 Scan Barcode
               </Text>
-              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 6, fontSize: 12, lineHeight: 16 }}>
+              <Text style={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                textAlign: 'center',
+                marginTop: 6,
+                fontSize: 12,
+                lineHeight: 16
+              }}>
                 Quick compliance check for packaged foods
               </Text>
             </View>
@@ -140,26 +150,33 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
           {/* Food Label Scanner */}
           <Pressable
             onPress={() => handleScanTypeSelect('food_label')}
-            style={({ pressed }) => ({
+            style={{
               backgroundColor: '#3498DB',
-              shadowColor: '#3498DB',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.15,
-              shadowRadius: 12,
-              elevation: 8,
               borderRadius: 20,
               padding: 24,
-              transform: [{ scale: pressed ? 0.95 : 1 }],
               marginBottom: 16,
-              minHeight: 120
-            })}
+              minHeight: 120,
+            }}
           >
             <View style={{ alignItems: 'center' }}>
               <Ionicons name="nutrition-outline" size={48} color="white" />
-              <Text style={{ color: 'white', fontWeight: '700', fontSize: 18, lineHeight: 22, marginTop: 12 }}>
+              <Text style={{
+                color: 'white',
+                fontWeight: '700',
+                fontSize: 18,
+                lineHeight: 22,
+                marginTop: 12,
+                textAlign: 'center'
+              }}>
                 Scan Food Label
               </Text>
-              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 6, fontSize: 12, lineHeight: 16 }}>
+              <Text style={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                textAlign: 'center',
+                marginTop: 6,
+                fontSize: 12,
+                lineHeight: 16
+              }}>
                 Analyze ingredients and nutrition information
               </Text>
             </View>
@@ -168,26 +185,33 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
           {/* Restaurant Menu Scanner */}
           <Pressable
             onPress={() => handleScanTypeSelect('restaurant_menu')}
-            style={({ pressed }) => ({
+            style={{
               backgroundColor: '#16A085',
-              shadowColor: '#16A085',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.15,
-              shadowRadius: 12,
-              elevation: 8,
               borderRadius: 20,
               padding: 24,
-              transform: [{ scale: pressed ? 0.95 : 1 }],
               marginBottom: 16,
-              minHeight: 120
-            })}
+              minHeight: 120,
+            }}
           >
             <View style={{ alignItems: 'center' }}>
               <Ionicons name="restaurant-outline" size={48} color="white" />
-              <Text style={{ color: 'white', fontWeight: '700', fontSize: 18, lineHeight: 22, marginTop: 12 }}>
+              <Text style={{
+                color: 'white',
+                fontWeight: '700',
+                fontSize: 18,
+                lineHeight: 22,
+                marginTop: 12,
+                textAlign: 'center'
+              }}>
                 Scan Restaurant Menu
               </Text>
-              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 6, fontSize: 12, lineHeight: 16 }}>
+              <Text style={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                textAlign: 'center',
+                marginTop: 6,
+                fontSize: 12,
+                lineHeight: 16
+              }}>
                 Get recommendations and modification suggestions
               </Text>
             </View>
