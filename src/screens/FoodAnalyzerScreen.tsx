@@ -7,6 +7,7 @@ import * as Haptics from 'expo-haptics';
 import { cn } from '../utils/cn';
 import { ScanType } from './WelcomeScreen';
 import { useSubscriptionStore } from '../state/subscriptionStore';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type AnalysisResult = {
   status: 'compliant' | 'not_compliant' | 'caution';
@@ -225,26 +226,26 @@ export default function FoodAnalyzerScreen({ scanType, onBack, onSubscriptionReq
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'compliant':
-        return <Ionicons name="checkmark-circle" size={80} color="#10b981" />;
+        return <Ionicons name="checkmark-circle" size={80} color="#2ECC71" />;
       case 'not_compliant':
-        return <Ionicons name="close-circle" size={80} color="#ef4444" />;
+        return <Ionicons name="close-circle" size={80} color="#E74C3C" />;
       case 'caution':
-        return <Ionicons name="warning" size={80} color="#f59e0b" />;
+        return <Ionicons name="warning" size={80} color="#E67E22" />;
       default:
-        return <Ionicons name="help-circle" size={80} color="#6b7280" />;
+        return <Ionicons name="help-circle" size={80} color="#95A5A6" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'compliant':
-        return 'bg-green-50 border-green-200';
+        return 'bg-background-success border-success/20';
       case 'not_compliant':
-        return 'bg-red-50 border-red-200';
+        return 'bg-error/5 border-error/20';
       case 'caution':
-        return 'bg-yellow-50 border-yellow-200';
+        return 'bg-warning/5 border-warning/20';
       default:
-        return 'bg-gray-50 border-gray-200';
+        return 'bg-background-secondary border-background-tertiary';
     }
   };
 
