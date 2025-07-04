@@ -3,10 +3,13 @@ import { View, Text, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import FloatingMenu from '../components/FloatingMenu';
 
 interface MainMenuScreenProps {
   navigation: any;
 }
+
+type MenuNavigationType = 'guidelines' | 'greens_tracker' | 'scanner' | 'history';
 
 export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
   const insets = useSafeAreaInsets();
@@ -14,6 +17,16 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
   const handleMenuPress = async (screenName: string) => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     navigation.navigate(screenName);
+  };
+
+  const handleFloatingMenuNavigate = (screen: MenuNavigationType) => {
+    const screenMapping = {
+      'guidelines': 'Guidelines',
+      'greens_tracker': 'GreensTracker', 
+      'scanner': 'FoodAnalyzer',
+      'history': 'GreensHistory'
+    };
+    navigation.navigate(screenMapping[screen]);
   };
 
   const menuItems = [
@@ -49,6 +62,9 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
+      {/* Floating Menu */}
+      <FloatingMenu onNavigate={handleFloatingMenuNavigate} />
+      
       <View style={{ paddingTop: insets.top }} className="bg-white/90 border-b border-gray-200">
         <View style={{ 
           flexDirection: 'row', 
