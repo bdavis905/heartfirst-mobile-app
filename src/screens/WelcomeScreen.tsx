@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSubscriptionStore } from '../state/subscriptionStore';
-// import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export type ScanType = 'barcode' | 'food_label' | 'restaurant_menu';
 
@@ -25,18 +25,39 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
   const subscriptionStatus = getSubscriptionStatus();
 
   return (
-    <View className="flex-1" style={{ backgroundColor: '#FFFFFF' }}>
-        <View style={{ paddingTop: insets.top }} className="bg-background-primary/90 border-b border-background-tertiary">
-          <View className="px-24dp py-20dp">
-            <Text className="text-h2 font-semibold text-text-primary text-center">
+    <View className="flex-1">
+      <LinearGradient
+        colors={['#FFFFFF', '#E8F6F3']}
+        locations={[0, 1]}
+        className="flex-1"
+      >
+        <View style={{ paddingTop: insets.top }} className="bg-white/90 border-b border-gray-200">
+          <View style={{ paddingHorizontal: 24, paddingVertical: 20 }}>
+            <Text 
+              className="font-semibold text-center"
+              style={{
+                color: '#2C3E50',
+                fontSize: 28,
+                lineHeight: 34,
+                letterSpacing: -0.3
+              }}
+            >
               Food Analyzer
             </Text>
-            <Text className="text-body-regular text-text-secondary text-center mt-8dp">
+            <Text 
+              className="text-center"
+              style={{
+                color: '#7F8C8D',
+                fontSize: 15,
+                lineHeight: 22,
+                marginTop: 8
+              }}
+            >
               Choose what you'd like to scan
             </Text>
             
             {/* Subscription Status */}
-            <View className="mt-16dp items-center">
+            <View style={{ marginTop: 16 }} className="items-center">
               {isSubscribed ? (
                 <View className="bg-secondary-green-pale rounded-full px-16dp py-8dp">
                   <Text className="text-success font-medium text-caption">
@@ -65,8 +86,9 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
             {/* Barcode Scanner */}
             <Pressable
               onPress={() => handleScanTypeSelect('barcode')}
-              className="bg-accent-coral rounded-28dp p-32dp shadow-lg active:scale-95"
+              className="rounded-3xl p-8 shadow-lg active:scale-95"
               style={{
+                backgroundColor: '#FF6B6B',
                 shadowColor: '#FF6B6B',
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.15,
@@ -88,8 +110,9 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
             {/* Food Label Scanner */}
             <Pressable
               onPress={() => handleScanTypeSelect('food_label')}
-              className="bg-info rounded-28dp p-32dp shadow-lg active:scale-95"
+              className="rounded-3xl p-8 shadow-lg active:scale-95"
               style={{
+                backgroundColor: '#3498DB',
                 shadowColor: '#3498DB',
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.15,
@@ -111,8 +134,9 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
             {/* Restaurant Menu Scanner */}
             <Pressable
               onPress={() => handleScanTypeSelect('restaurant_menu')}
-              className="bg-primary-green rounded-28dp p-32dp shadow-lg active:scale-95"
+              className="rounded-3xl p-8 shadow-lg active:scale-95"
               style={{
+                backgroundColor: '#16A085',
                 shadowColor: '#16A085',
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.15,
@@ -138,6 +162,7 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
             </Text>
           </View>
         </View>
+      </LinearGradient>
     </View>
   );
 }

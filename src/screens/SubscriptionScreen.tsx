@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSubscriptionStore } from '../state/subscriptionStore';
-// import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface SubscriptionScreenProps {
   onBack: () => void;
@@ -39,7 +39,12 @@ export default function SubscriptionScreen({ onBack, onSubscribe }: Subscription
   };
 
   return (
-    <View className="flex-1" style={{ backgroundColor: '#FFFFFF' }}>
+    <View className="flex-1">
+      <LinearGradient
+        colors={['#FFFFFF', '#E8F6F3']}
+        locations={[0, 1]}
+        className="flex-1"
+      >
         <View style={{ paddingTop: insets.top }} className="bg-background-primary/90 border-b border-background-tertiary">
           <View className="flex-row items-center justify-between px-24dp py-20dp">
             <Pressable onPress={handleBack} className="flex-row items-center">
@@ -158,6 +163,7 @@ export default function SubscriptionScreen({ onBack, onSubscribe }: Subscription
             </Text>
           </Pressable>
         </ScrollView>
+      </LinearGradient>
     </View>
   );
 }
