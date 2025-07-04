@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
-import FoodAnalyzerScreen from "./src/screens/FoodAnalyzerScreen";
+import MainNavigator from "./src/screens/MainNavigator";
 
 /*
 IMPORTANT NOTICE: DO NOT REMOVE
@@ -28,7 +28,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <FoodAnalyzerScreen />
+        <MainNavigator />
         <StatusBar style="auto" />
       </NavigationContainer>
     </SafeAreaProvider>

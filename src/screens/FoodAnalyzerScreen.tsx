@@ -1,17 +1,25 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Pressable, Image } from 'react-native';
+import { View, Text, Pressable, Image, ScrollView } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions, CameraViewRef } from 'expo-camera';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { cn } from '../utils/cn';
+import { ScanType } from './WelcomeScreen';
 
 type AnalysisResult = {
   status: 'compliant' | 'not_compliant' | 'caution';
   explanation: string;
+  suggestions?: string[];
+  modifications?: string[];
 };
 
-export default function FoodAnalyzerScreen() {
+interface FoodAnalyzerScreenProps {
+  scanType: ScanType;
+  onBack: () => void;
+}
+
+export default function FoodAnalyzerScreen({ scanType, onBack }: FoodAnalyzerScreenProps) {
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -79,43 +87,80 @@ export default function FoodAnalyzerScreen() {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Mock responses for different scenarios
-      const mockResponses = [
-        {
-          status: 'compliant' as const,
-          explanation: "✅ Great choice! This food item is compliant with Dr. Esselstyn's heart disease reversal protocol. It contains no oil, dairy, meat, added sugars, or excessive sodium. This whole food, plant-based option supports heart health and disease reversal."
-        },
-        {
-          status: 'not_compliant' as const,
-          explanation: "❌ This food item is NOT compliant with Dr. Esselstyn's protocol. It contains oil and dairy, which are not allowed on the program. These ingredients can contribute to arterial plaque buildup and interfere with heart disease reversal. Consider choosing whole, plant-based alternatives."
-        },
-        {
-          status: 'caution' as const,
-          explanation: "⚠️ Caution advised with this food item. While it may not contain obvious non-compliant ingredients, it appears to have added sugars and higher sodium content. Check the ingredient list carefully and consider limiting consumption. Look for versions with no added sugars or salt."
-        },
-        {
-          status: 'not_compliant' as const,
-          explanation: "❌ This processed food contains multiple non-compliant ingredients including oil, meat, and high sodium levels. These ingredients are strictly avoided on Dr. Esselstyn's protocol as they can promote inflammation and cardiovascular disease progression."
-        },
-        {
-          status: 'caution' as const,
-          explanation: "⚠️ This item needs careful consideration. While plant-based, it may contain oils or excessive sodium. Dr. Esselstyn's protocol requires avoiding all added oils, even plant-based ones. Check labels for oil-free versions or consider making homemade alternatives."
-        }
-      ];
+      let mockResponse: AnalysisResult;
 
-      // Randomly select a mock response
-      const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+      if (scanType === 'restaurant_menu') {
+        // Restaurant menu responses with suggestions and modifications
+        const menuResponses = [
+          {
+            status: 'caution' as const,
+            explanation: "🍽️ This menu has several options that can be modified for Dr. Esselstyn's protocol. Most dishes contain oil, dairy, or meat, but many can be adapted.",
+            suggestions: [
+              "Garden salad without dressing",
+              "Steamed vegetables (ask for no butter)",
+              "Baked potato without toppings",
+              "Fruit bowl or fresh berries"
+            ],
+            modifications: [
+              "Ask for all dressings and sauces on the side",
+              "Request no oil, butter, or cheese on any dish",
+              "Substitute oil-based cooking with steaming or dry sautéing",
+              "Ask for extra vegetables instead of meat or cheese"
+            ]
+          },
+          {
+            status: 'caution' as const,
+            explanation: "🥗 This restaurant appears to have some plant-based options, but most will need modifications to be fully compliant with the protocol.",
+            suggestions: [
+              "Mediterranean bowl without feta and dressing",
+              "Vegetable soup (confirm no oil or cream)",
+              "Grilled vegetables (request no oil)",
+              "Brown rice or quinoa bowl"
+            ],
+            modifications: [
+              "Request no oil in preparation",
+              "Ask for lemon or vinegar instead of oil-based dressings",
+              "Substitute dairy cheese with extra vegetables",
+              "Ask for herbs and spices instead of salt"
+            ]
+          }
+        ];
+        mockResponse = menuResponses[Math.floor(Math.random() * menuResponses.length)];
+      } else {
+        // Barcode and food label responses (binary compliance)
+        const binaryResponses = [
+          {
+            status: 'compliant' as const,
+            explanation: scanType === 'barcode' ? 
+              "✅ Great choice! This product is compliant with Dr. Esselstyn's protocol. The barcode indicates a whole food, plant-based item with no oil, dairy, meat, added sugars, or excessive sodium." :
+              "✅ Excellent! This food label shows full compliance with Dr. Esselstyn's protocol. All ingredients are whole food, plant-based with no prohibited items."
+          },
+          {
+            status: 'not_compliant' as const,
+            explanation: scanType === 'barcode' ? 
+              "❌ This product is NOT compliant with Dr. Esselstyn's protocol. The barcode indicates it contains oil and dairy, which are strictly avoided on the program." :
+              "❌ This food label shows non-compliant ingredients including oil, dairy, and high sodium. These ingredients interfere with heart disease reversal."
+          },
+          {
+            status: 'caution' as const,
+            explanation: scanType === 'barcode' ? 
+              "⚠️ Caution with this product. While mostly plant-based, it contains added sugars and higher sodium than recommended for optimal heart health." :
+              "⚠️ This label shows some concerning ingredients. While no obvious non-compliant items, the added sugars and sodium levels may be too high for the protocol."
+          }
+        ];
+        mockResponse = binaryResponses[Math.floor(Math.random() * binaryResponses.length)];
+      }
       
       // Haptic feedback for result
-      if (randomResponse.status === 'compliant') {
+      if (mockResponse.status === 'compliant') {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      } else if (randomResponse.status === 'not_compliant') {
+      } else if (mockResponse.status === 'not_compliant') {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       } else {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
       }
 
-      setAnalysisResult(randomResponse);
+      setAnalysisResult(mockResponse);
     } catch (error) {
       console.error('Error analyzing image:', error);
       setAnalysisResult({
@@ -130,6 +175,32 @@ export default function FoodAnalyzerScreen() {
   const resetAnalysis = () => {
     setCapturedImage(null);
     setAnalysisResult(null);
+  };
+
+  const getScanTypeTitle = () => {
+    switch (scanType) {
+      case 'barcode':
+        return 'Barcode Scanner';
+      case 'food_label':
+        return 'Food Label Scanner';
+      case 'restaurant_menu':
+        return 'Menu Scanner';
+      default:
+        return 'Food Analyzer';
+    }
+  };
+
+  const getScanTypeInstructions = () => {
+    switch (scanType) {
+      case 'barcode':
+        return 'Point camera at the barcode';
+      case 'food_label':
+        return 'Point camera at the nutrition label';
+      case 'restaurant_menu':
+        return 'Point camera at the menu';
+      default:
+        return 'Point camera at food item';
+    }
   };
 
   const getStatusIcon = (status: string) => {
@@ -163,16 +234,16 @@ export default function FoodAnalyzerScreen() {
       <View className="flex-1 bg-slate-50">
         <View style={{ paddingTop: insets.top }} className="bg-white border-b border-gray-200">
           <View className="flex-row items-center justify-between px-6 py-4">
-            <Pressable onPress={resetAnalysis} className="flex-row items-center">
+            <Pressable onPress={onBack} className="flex-row items-center">
               <Ionicons name="arrow-back" size={24} color="#374151" />
               <Text className="text-gray-700 font-medium ml-2">Back</Text>
             </Pressable>
-            <Text className="text-lg font-semibold text-gray-800">Food Analysis</Text>
+            <Text className="text-lg font-semibold text-gray-800">{getScanTypeTitle()}</Text>
             <View className="w-16" />
           </View>
         </View>
 
-        <View className="flex-1 p-6">
+        <ScrollView className="flex-1 p-6">
           <View className="bg-white rounded-2xl overflow-hidden shadow-sm mb-6">
             <Image source={{ uri: capturedImage }} className="w-full h-48" resizeMode="cover" />
           </View>
@@ -185,7 +256,10 @@ export default function FoodAnalyzerScreen() {
                   Analyzing...
                 </Text>
                 <Text className="text-gray-600 text-center">
-                  Checking ingredients against Dr. Esselstyn's protocol
+                  {scanType === 'restaurant_menu' ? 
+                    'Finding compliant options and modifications' : 
+                    "Checking ingredients against Dr. Esselstyn's protocol"
+                  }
                 </Text>
               </View>
             </View>
@@ -194,20 +268,64 @@ export default function FoodAnalyzerScreen() {
               <View className="items-center mb-6">
                 {getStatusIcon(analysisResult.status)}
               </View>
-              <Text className="text-gray-800 text-base leading-relaxed text-center mb-8">
+              <Text className="text-gray-800 text-base leading-relaxed text-center mb-6">
                 {analysisResult.explanation}
               </Text>
+
+              {/* Restaurant Menu Suggestions */}
+              {scanType === 'restaurant_menu' && analysisResult.suggestions && analysisResult.suggestions.length > 0 && (
+                <View className="mb-6">
+                  <Text className="text-lg font-semibold text-gray-800 mb-3">
+                    ✅ Recommended Options:
+                  </Text>
+                  {analysisResult.suggestions.map((suggestion, index) => (
+                    <View key={index} className="flex-row items-start mb-2">
+                      <Ionicons name="checkmark-circle" size={16} color="#10b981" style={{ marginTop: 2 }} />
+                      <Text className="text-gray-700 ml-2 flex-1">
+                        {suggestion}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {/* Restaurant Menu Modifications */}
+              {scanType === 'restaurant_menu' && analysisResult.modifications && analysisResult.modifications.length > 0 && (
+                <View className="mb-8">
+                  <Text className="text-lg font-semibold text-gray-800 mb-3">
+                    🔄 Ask for These Modifications:
+                  </Text>
+                  {analysisResult.modifications.map((modification, index) => (
+                    <View key={index} className="flex-row items-start mb-2">
+                      <Ionicons name="swap-horizontal" size={16} color="#0ea5e9" style={{ marginTop: 2 }} />
+                      <Text className="text-gray-700 ml-2 flex-1">
+                        {modification}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
               <Pressable
                 onPress={resetAnalysis}
-                className="bg-blue-500 rounded-xl py-4 px-6"
+                className="bg-blue-500 rounded-xl py-4 px-6 mb-2"
               >
                 <Text className="text-white font-semibold text-center">
                   Scan Another Item
                 </Text>
               </Pressable>
+              
+              <Pressable
+                onPress={onBack}
+                className="bg-gray-200 rounded-xl py-4 px-6"
+              >
+                <Text className="text-gray-700 font-semibold text-center">
+                  Choose Different Scan Type
+                </Text>
+              </Pressable>
             </View>
           ) : null}
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -223,8 +341,10 @@ export default function FoodAnalyzerScreen() {
           {/* Header */}
           <View style={{ paddingTop: insets.top }} className="bg-black/20 backdrop-blur-sm">
             <View className="flex-row items-center justify-between px-6 py-4">
-              <View className="w-12" />
-              <Text className="text-white font-semibold text-lg">Food Analyzer</Text>
+              <Pressable onPress={onBack} className="w-12 h-12 items-center justify-center">
+                <Ionicons name="arrow-back" size={24} color="white" />
+              </Pressable>
+              <Text className="text-white font-semibold text-lg">{getScanTypeTitle()}</Text>
               <Pressable onPress={toggleCameraFacing} className="w-12 h-12 items-center justify-center">
                 <Ionicons name="camera-reverse" size={24} color="white" />
               </Pressable>
@@ -235,7 +355,7 @@ export default function FoodAnalyzerScreen() {
           <View className="flex-1 justify-center items-center px-6">
             <View className="bg-black/60 rounded-2xl p-6 mb-8">
               <Text className="text-white text-center font-medium mb-2">
-                Point camera at food label or menu
+                {getScanTypeInstructions()}
               </Text>
               <Text className="text-white/80 text-center text-sm">
                 Tap the button below to capture and analyze
