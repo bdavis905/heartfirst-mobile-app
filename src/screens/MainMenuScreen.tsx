@@ -104,52 +104,151 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
       </View>
 
       <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 32 }}>
-        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center', marginBottom: 20 }}>DEBUG: Menu Items Loading...</Text>
-        <View style={{ flexDirection: 'column' }}>
-          {menuItems.map((item, index) => (
-            <Pressable
-              key={item.screen}
-              onPress={() => handleMenuPress(item.screen)}
-              style={({ pressed }) => ({
-                backgroundColor: item.color,
-                borderRadius: 24,
-                padding: 32,
-                shadowColor: item.color,
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.15,
-                shadowRadius: 12,
-                elevation: 8,
-                transform: [{ scale: pressed ? 0.95 : 1 }],
-                marginBottom: index < menuItems.length - 1 ? 24 : 0,
-                minHeight: 140,
-                width: '100%',
-              })}
-            >
-              <View style={{ alignItems: 'center' }}>
-                <Ionicons name={item.icon as any} size={64} color="white" />
-                <Text style={{
-                  color: 'white',
-                  fontSize: 20,
-                  lineHeight: 26,
-                  fontWeight: '700',
-                  marginTop: 16,
-                  textAlign: 'center'
-                }}>
-                  {item.title}
-                </Text>
-                <Text style={{
-                  color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: 14,
-                  lineHeight: 18,
-                  fontWeight: '500',
-                  marginTop: 8,
-                  textAlign: 'center'
-                }}>
-                  {item.subtitle}
-                </Text>
-              </View>
-            </Pressable>
-          ))}
+        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center', marginBottom: 20 }}>DEBUG: Menu Items Count: {menuItems.length}</Text>
+        
+        {/* Food Scanner Button */}
+        <Pressable
+          onPress={() => handleMenuPress('FoodAnalyzer')}
+          style={{
+            backgroundColor: '#3498DB',
+            borderRadius: 24,
+            padding: 32,
+            marginBottom: 24,
+            minHeight: 140,
+          }}
+        >
+          <View style={{ alignItems: 'center' }}>
+            <Ionicons name="camera-outline" size={64} color="white" />
+            <Text style={{
+              color: 'white',
+              fontSize: 20,
+              lineHeight: 26,
+              fontWeight: '700',
+              marginTop: 16,
+              textAlign: 'center'
+            }}>
+              Food Scanner
+            </Text>
+            <Text style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: 14,
+              lineHeight: 18,
+              fontWeight: '500',
+              marginTop: 8,
+              textAlign: 'center'
+            }}>
+              Analyze your meals for heart health
+            </Text>
+          </View>
+        </Pressable>
+
+        {/* Daily Greens Button */}
+        <Pressable
+          onPress={() => handleMenuPress('GreensTracker')}
+          style={{
+            backgroundColor: '#16A085',
+            borderRadius: 24,
+            padding: 32,
+            marginBottom: 24,
+            minHeight: 140,
+          }}
+        >
+          <View style={{ alignItems: 'center' }}>
+            <Ionicons name="leaf-outline" size={64} color="white" />
+            <Text style={{
+              color: 'white',
+              fontSize: 20,
+              lineHeight: 26,
+              fontWeight: '700',
+              marginTop: 16,
+              textAlign: 'center'
+            }}>
+              Daily Greens
+            </Text>
+            <Text style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: 14,
+              lineHeight: 18,
+              fontWeight: '500',
+              marginTop: 8,
+              textAlign: 'center'
+            }}>
+              Track your 6 daily servings
+            </Text>
+          </View>
+        </Pressable>
+
+        {/* History Button */}
+        <Pressable
+          onPress={() => handleMenuPress('GreensHistory')}
+          style={{
+            backgroundColor: '#9B59B6',
+            borderRadius: 24,
+            padding: 32,
+            marginBottom: 24,
+            minHeight: 140,
+          }}
+        >
+          <View style={{ alignItems: 'center' }}>
+            <Ionicons name="stats-chart-outline" size={64} color="white" />
+            <Text style={{
+              color: 'white',
+              fontSize: 20,
+              lineHeight: 26,
+              fontWeight: '700',
+              marginTop: 16,
+              textAlign: 'center'
+            }}>
+              History
+            </Text>
+            <Text style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: 14,
+              lineHeight: 18,
+              fontWeight: '500',
+              marginTop: 8,
+              textAlign: 'center'
+            }}>
+              View your weekly progress
+            </Text>
+          </View>
+        </Pressable>
+
+        {/* Guidelines Button */}
+        <Pressable
+          onPress={() => handleMenuPress('Guidelines')}
+          style={{
+            backgroundColor: '#E74C3C',
+            borderRadius: 24,
+            padding: 32,
+            marginBottom: 24,
+            minHeight: 140,
+          }}
+        >
+          <View style={{ alignItems: 'center' }}>
+            <Ionicons name="heart-outline" size={64} color="white" />
+            <Text style={{
+              color: 'white',
+              fontSize: 20,
+              lineHeight: 26,
+              fontWeight: '700',
+              marginTop: 16,
+              textAlign: 'center'
+            }}>
+              Guidelines
+            </Text>
+            <Text style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: 14,
+              lineHeight: 18,
+              fontWeight: '500',
+              marginTop: 8,
+              textAlign: 'center'
+            }}>
+              Dr. Esselstyn's heart protocol
+            </Text>
+          </View>
+        </Pressable>
         </View>
 
         <View style={{ marginTop: 48, paddingHorizontal: 16 }}>
