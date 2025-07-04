@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, Pressable, Modal, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+
 import * as Haptics from 'expo-haptics';
 
 interface MenuModalProps {
