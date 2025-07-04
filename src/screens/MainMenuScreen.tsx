@@ -103,8 +103,9 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
         </View>
       </View>
 
-      <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 32, justifyContent: 'center' }}>
-        <View style={{ gap: 24 }}>
+      <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 32 }}>
+        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center', marginBottom: 20 }}>DEBUG: Menu Items Loading...</Text>
+        <View style={{ flexDirection: 'column' }}>
           {menuItems.map((item, index) => (
             <Pressable
               key={item.screen}
@@ -119,6 +120,9 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
                 shadowRadius: 12,
                 elevation: 8,
                 transform: [{ scale: pressed ? 0.95 : 1 }],
+                marginBottom: index < menuItems.length - 1 ? 24 : 0,
+                minHeight: 140,
+                width: '100%',
               })}
             >
               <View style={{ alignItems: 'center' }}>
