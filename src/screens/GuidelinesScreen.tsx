@@ -1,9 +1,16 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 
-export default function GuidelinesScreen() {
+interface GuidelinesScreenProps {
+  navigation?: {
+    goBack: () => void;
+  };
+}
+
+export default function GuidelinesScreen({ navigation }: GuidelinesScreenProps) {
   const insets = useSafeAreaInsets();
 
   const guidelines = [
@@ -83,30 +90,57 @@ export default function GuidelinesScreen() {
         shadowRadius: 2,
         elevation: 2,
       }}>
-        <View style={{ paddingHorizontal: 24, paddingVertical: 20 }}>
-          <Text
-            style={{
-              color: '#2C3E50',
-              fontSize: 28,
-              lineHeight: 34,
-              letterSpacing: -0.3,
-              fontWeight: 'bold',
-              textAlign: 'center',
-            }}
-          >
-            Dr. Esselstyn's Guidelines
-          </Text>
-          <Text
-            style={{
-              color: '#7F8C8D',
-              fontSize: 15,
-              lineHeight: 22,
-              textAlign: 'center',
-              marginTop: 8,
-            }}
-          >
-            Heart Disease Reversal Protocol
-          </Text>
+        <View style={{ 
+          flexDirection: 'row', 
+          alignItems: 'center', 
+          paddingHorizontal: 24, 
+          paddingVertical: 20 
+        }}>
+          {navigation && (
+            <Pressable
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.6 : 1,
+                marginRight: 16,
+                padding: 8,
+                marginLeft: -8,
+              })}
+            >
+              <Ionicons name="chevron-back" size={24} color="#16A085" />
+            </Pressable>
+          )}
+          
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text
+              style={{
+                color: '#2C3E50',
+                fontSize: 28,
+                lineHeight: 34,
+                letterSpacing: -0.3,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
+              Dr. Esselstyn's Guidelines
+            </Text>
+            <Text
+              style={{
+                color: '#7F8C8D',
+                fontSize: 15,
+                lineHeight: 22,
+                textAlign: 'center',
+                marginTop: 8,
+              }}
+            >
+              Heart Disease Reversal Protocol
+            </Text>
+          </View>
+          
+          {/* Spacer to balance the back button */}
+          <View style={{ width: 40 }} />
         </View>
       </View>
 

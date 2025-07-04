@@ -6,7 +6,13 @@ import * as Haptics from 'expo-haptics';
 import { useGreensTrackerStore } from '../state/greensTrackerStore';
 import GreensRingProgress from '../components/GreensRingProgress';
 
-export default function GreensTrackerScreen() {
+interface GreensTrackerScreenProps {
+  navigation?: {
+    goBack: () => void;
+  };
+}
+
+export default function GreensTrackerScreen({ navigation }: GreensTrackerScreenProps) {
   const insets = useSafeAreaInsets();
   const {
     servings,
@@ -51,30 +57,57 @@ export default function GreensTrackerScreen() {
         shadowRadius: 2,
         elevation: 2,
       }}>
-        <View style={{ paddingHorizontal: 24, paddingVertical: 20 }}>
-          <Text
-            style={{
-              color: '#2C3E50',
-              fontSize: 28,
-              lineHeight: 34,
-              letterSpacing: -0.3,
-              fontWeight: 'bold',
-              textAlign: 'center',
-            }}
-          >
-            Daily Greens Tracker
-          </Text>
-          <Text
-            style={{
-              color: '#7F8C8D',
-              fontSize: 15,
-              lineHeight: 22,
-              textAlign: 'center',
-              marginTop: 8,
-            }}
-          >
-            Track your 6 daily servings
-          </Text>
+        <View style={{ 
+          flexDirection: 'row', 
+          alignItems: 'center', 
+          paddingHorizontal: 24, 
+          paddingVertical: 20 
+        }}>
+          {navigation && (
+            <Pressable
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.6 : 1,
+                marginRight: 16,
+                padding: 8,
+                marginLeft: -8,
+              })}
+            >
+              <Ionicons name="chevron-back" size={24} color="#16A085" />
+            </Pressable>
+          )}
+          
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text
+              style={{
+                color: '#2C3E50',
+                fontSize: 28,
+                lineHeight: 34,
+                letterSpacing: -0.3,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
+              Daily Greens Tracker
+            </Text>
+            <Text
+              style={{
+                color: '#7F8C8D',
+                fontSize: 15,
+                lineHeight: 22,
+                textAlign: 'center',
+                marginTop: 8,
+              }}
+            >
+              Track your 6 daily servings
+            </Text>
+          </View>
+          
+          {/* Spacer to balance the back button */}
+          <View style={{ width: 40 }} />
         </View>
       </View>
 

@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import NewWelcomeScreen from './NewWelcomeScreen';
 import MedicalAgreementScreen from './MedicalAgreementScreen';
+import MainMenuScreen from './MainMenuScreen';
 import WelcomeScreen, { ScanType } from './WelcomeScreen';
 import FoodAnalyzerScreen from './FoodAnalyzerScreen';
 import SubscriptionScreen from './SubscriptionScreen';
 import GuidelinesScreen from './GuidelinesScreen';
 import GreensTrackerScreen from './GreensTrackerScreen';
-import FloatingMenu from '../components/FloatingMenu';
 
-type Screen = 'new_welcome' | 'medical_agreement' | 'scan_selection' | 'camera' | 'subscription' | 'guidelines' | 'greens_tracker';
+type Screen = 'new_welcome' | 'medical_agreement' | 'main_menu' | 'scan_selection' | 'camera' | 'subscription' | 'guidelines' | 'greens_tracker' | 'greens_history';
 
 export default function MainNavigator() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('new_welcome');
@@ -20,7 +20,7 @@ export default function MainNavigator() {
   };
 
   const handleMedicalAgreementAccept = () => {
-    setCurrentScreen('scan_selection');
+    setCurrentScreen('main_menu');
   };
 
   const handleMedicalAgreementClose = () => {
@@ -45,18 +45,31 @@ export default function MainNavigator() {
   };
 
   const handleBackFromSubscription = () => {
-    setCurrentScreen('scan_selection');
+    setCurrentScreen('main_menu');
   };
 
-  const handleMenuNavigate = (screen: 'guidelines' | 'greens_tracker' | 'scanner') => {
-    if (screen === 'scanner') {
-      setCurrentScreen('scan_selection');
-    } else {
-      setCurrentScreen(screen);
+  const handleMainMenuNavigate = (screen: string) => {
+    switch (screen) {
+      case 'Guidelines':
+        setCurrentScreen('guidelines');
+        break;
+      case 'FoodAnalyzer':
+        setCurrentScreen('scan_selection');
+        break;
+      case 'GreensTracker':
+        setCurrentScreen('greens_tracker');
+        break;
+      case 'GreensHistory':
+        setCurrentScreen('greens_history');
+        break;
+      default:
+        setCurrentScreen('main_menu');
     }
   };
 
-  const shouldShowMenu = currentScreen !== 'new_welcome' && currentScreen !== 'medical_agreement';
+  const handleBackToMainMenu = () => {
+    setCurrentScreen('main_menu');
+  };
 
   if (currentScreen === 'new_welcome') {
     return <NewWelcomeScreen onGetStarted={handleGetStarted} />;
@@ -71,55 +84,64 @@ export default function MainNavigator() {
     );
   }
 
+  if (currentScreen === 'main_menu') {
+    return (
+      <MainMenuScreen 
+        navigation={{ navigate: handleMainMenuNavigate }}
+      />
+    );
+  }
+
   if (currentScreen === 'guidelines') {
     return (
-      <View className="flex-1">
-        <GuidelinesScreen />
-        {shouldShowMenu && <FloatingMenu onNavigate={handleMenuNavigate} />}
-      </View>
+      <GuidelinesScreen 
+        navigation={{ goBack: handleBackToMainMenu }}
+      />
     );
   }
 
   if (currentScreen === 'greens_tracker') {
     return (
-      <View className="flex-1">
-        <GreensTrackerScreen />
-        {shouldShowMenu && <FloatingMenu onNavigate={handleMenuNavigate} />}
+      <GreensTrackerScreen 
+        navigation={{ goBack: handleBackToMainMenu }}
+      />
+    );
+  }
+
+  if (currentScreen === 'greens_history') {
+    // TODO: Create GreensHistoryScreen
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Greens History Screen - Coming Soon!</Text>
       </View>
     );
   }
 
   if (currentScreen === 'scan_selection') {
     return (
-      <View className="flex-1">
-        <WelcomeScreen onScanTypeSelect={handleScanTypeSelect} />
-        {shouldShowMenu && <FloatingMenu onNavigate={handleMenuNavigate} />}
-      </View>
+      <WelcomeScreen 
+        onScanTypeSelect={handleScanTypeSelect}
+        navigation={{ goBack: handleBackToMainMenu }}
+      />
     );
   }
 
   if (currentScreen === 'subscription') {
     return (
-      <View className="flex-1">
-        <SubscriptionScreen 
-          onBack={handleBackFromSubscription}
-          onSubscribe={handleSubscriptionComplete}
-        />
-        {shouldShowMenu && <FloatingMenu onNavigate={handleMenuNavigate} />}
-      </View>
+      <SubscriptionScreen 
+        onBack={handleBackFromSubscription}
+        onSubscribe={handleSubscriptionComplete}
+      />
     );
   }
 
   if (currentScreen === 'camera') {
     return (
-      <View className="flex-1">
-        <FoodAnalyzerScreen 
-          scanType={selectedScanType} 
-          onBack={handleBackToScanSelection}
-          onSubscriptionRequired={handleSubscriptionRequired}
-        />
-        {shouldShowMenu && <FloatingMenu onNavigate={handleMenuNavigate} />}
-      </View>
+      <FoodAnalyzerScreen 
+        scanType={selectedScanType} 
+        onBack={handleBackToScanSelection}
+        onSubscriptionRequired={handleSubscriptionRequired}
+      />
     );
   }
 

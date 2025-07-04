@@ -10,9 +10,12 @@ export type ScanType = 'barcode' | 'food_label' | 'restaurant_menu';
 
 interface WelcomeScreenProps {
   onScanTypeSelect: (type: ScanType) => void;
+  navigation?: {
+    goBack: () => void;
+  };
 }
 
-export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) {
+export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeScreenProps) {
   const insets = useSafeAreaInsets();
   const { isSubscribed, getRemainingScans, getSubscriptionStatus } = useSubscriptionStore();
 
@@ -27,29 +30,57 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
   return (
     <View className="flex-1 bg-white">
         <View style={{ paddingTop: insets.top }} className="bg-white/90 border-b border-gray-200">
-          <View style={{ paddingHorizontal: 24, paddingVertical: 20 }}>
-            <Text 
-              className="font-semibold text-center"
-              style={{
-                color: '#2C3E50',
-                fontSize: 28,
-                lineHeight: 34,
-                letterSpacing: -0.3
-              }}
-            >
-              Food Analyzer
-            </Text>
-            <Text 
-              className="text-center"
-              style={{
-                color: '#7F8C8D',
-                fontSize: 15,
-                lineHeight: 22,
-                marginTop: 8
-              }}
-            >
-              Choose what you'd like to scan
-            </Text>
+          <View style={{ 
+            flexDirection: 'row', 
+            alignItems: 'center', 
+            paddingHorizontal: 24, 
+            paddingVertical: 20 
+          }}>
+            {navigation && (
+              <Pressable
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  navigation.goBack();
+                }}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.6 : 1,
+                  marginRight: 16,
+                  padding: 8,
+                  marginLeft: -8,
+                })}
+              >
+                <Ionicons name="chevron-back" size={24} color="#16A085" />
+              </Pressable>
+            )}
+            
+            <View style={{ flex: 1, alignItems: 'center' }}>
+              <Text 
+                className="font-semibold text-center"
+                style={{
+                  color: '#2C3E50',
+                  fontSize: 28,
+                  lineHeight: 34,
+                  letterSpacing: -0.3
+                }}
+              >
+                Food Analyzer
+              </Text>
+              <Text 
+                className="text-center"
+                style={{
+                  color: '#7F8C8D',
+                  fontSize: 15,
+                  lineHeight: 22,
+                  marginTop: 8
+                }}
+              >
+                Choose what you'd like to scan
+              </Text>
+            </View>
+            
+            {/* Spacer to balance the back button */}
+            <View style={{ width: 40 }} />
+          </View>
             
             {/* Subscription Status */}
             <View style={{ marginTop: 16 }} className="items-center">
