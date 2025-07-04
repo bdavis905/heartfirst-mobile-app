@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSubscriptionStore } from '../state/subscriptionStore';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient';
 
 export type ScanType = 'barcode' | 'food_label' | 'restaurant_menu';
 
@@ -25,12 +25,7 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
   const subscriptionStatus = getSubscriptionStatus();
 
   return (
-    <View className="flex-1">
-      <LinearGradient
-        colors={['#FFFFFF', '#E8F6F3']}
-        locations={[0, 1]}
-        className="flex-1"
-      >
+    <View className="flex-1" style={{ backgroundColor: '#FFFFFF' }}>
         <View style={{ paddingTop: insets.top }} className="bg-background-primary/90 border-b border-background-tertiary">
           <View className="px-24dp py-20dp">
             <Text className="text-h2 font-semibold text-text-primary text-center">
@@ -143,7 +138,6 @@ export default function WelcomeScreen({ onScanTypeSelect }: WelcomeScreenProps) 
             </Text>
           </View>
         </View>
-      </LinearGradient>
     </View>
   );
 }

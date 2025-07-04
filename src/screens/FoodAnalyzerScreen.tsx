@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 import { cn } from '../utils/cn';
 import { ScanType } from './WelcomeScreen';
 import { useSubscriptionStore } from '../state/subscriptionStore';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient';
 
 type AnalysisResult = {
   status: 'compliant' | 'not_compliant' | 'caution';

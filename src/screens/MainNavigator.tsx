@@ -1,26 +1,18 @@
 import React, { useState } from 'react';
+import { View, Text } from 'react-native';
 import NewWelcomeScreen from './NewWelcomeScreen';
-import MedicalAgreementScreen from './MedicalAgreementScreen';
 import WelcomeScreen, { ScanType } from './WelcomeScreen';
 import FoodAnalyzerScreen from './FoodAnalyzerScreen';
 import SubscriptionScreen from './SubscriptionScreen';
 
-type Screen = 'new_welcome' | 'medical_agreement' | 'scan_selection' | 'camera' | 'subscription';
+type Screen = 'new_welcome' | 'scan_selection' | 'camera' | 'subscription';
 
 export default function MainNavigator() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('new_welcome');
   const [selectedScanType, setSelectedScanType] = useState<ScanType>('food_label');
 
   const handleGetStarted = () => {
-    setCurrentScreen('medical_agreement');
-  };
-
-  const handleMedicalAgreementAccept = () => {
     setCurrentScreen('scan_selection');
-  };
-
-  const handleMedicalAgreementClose = () => {
-    setCurrentScreen('new_welcome');
   };
 
   const handleScanTypeSelect = (type: ScanType) => {
@@ -48,15 +40,6 @@ export default function MainNavigator() {
     return <NewWelcomeScreen onGetStarted={handleGetStarted} />;
   }
 
-  if (currentScreen === 'medical_agreement') {
-    return (
-      <MedicalAgreementScreen 
-        onAccept={handleMedicalAgreementAccept}
-        onClose={handleMedicalAgreementClose}
-      />
-    );
-  }
-
   if (currentScreen === 'scan_selection') {
     return <WelcomeScreen onScanTypeSelect={handleScanTypeSelect} />;
   }
@@ -70,11 +53,19 @@ export default function MainNavigator() {
     );
   }
 
+  if (currentScreen === 'camera') {
+    return (
+      <FoodAnalyzerScreen 
+        scanType={selectedScanType} 
+        onBack={handleBackToScanSelection}
+        onSubscriptionRequired={handleSubscriptionRequired}
+      />
+    );
+  }
+
   return (
-    <FoodAnalyzerScreen 
-      scanType={selectedScanType} 
-      onBack={handleBackToScanSelection}
-      onSubscriptionRequired={handleSubscriptionRequired}
-    />
+    <View className="flex-1 bg-white items-center justify-center">
+      <Text>Loading...</Text>
+    </View>
   );
 }
