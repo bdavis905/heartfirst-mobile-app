@@ -82,49 +82,45 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
       animationType="none"
       onRequestClose={onClose}
     >
-      <View className="flex-1">
-        {/* Backdrop */}
-        <Animated.View
-          style={{
-            opacity: backdropAnimation,
-          }}
-          className="absolute inset-0 bg-black/50"
-        />
-        
-        <Pressable 
-          className="flex-1" 
-          onPress={onClose}
-          style={{ backgroundColor: 'transparent' }}
-        />
-
+      <View style={{ flex: 1, flexDirection: 'row' }}>
         {/* Menu Panel */}
         <Animated.View
           style={{
             transform: [{ translateX: slideAnimation }],
+            width: 320,
+            backgroundColor: 'white',
+            shadowColor: '#000',
+            shadowOffset: { width: 2, height: 0 },
+            shadowOpacity: 0.25,
+            shadowRadius: 8,
+            elevation: 10,
           }}
-          className="absolute left-0 top-0 bottom-0 w-80"
+          className="flex-1"
         >
           <LinearGradient
             colors={['#FFFFFF', '#E8F6F3']}
             locations={[0, 1]}
-            className="flex-1"
+            style={{ flex: 1 }}
           >
-            <View className="flex-1 pt-20 px-6">
+            <View style={{ flex: 1, paddingTop: 80, paddingHorizontal: 24 }}>
               {/* Header */}
-              <View className="mb-8">
-                <View className="flex-row items-center justify-between mb-4">
+              <View style={{ marginBottom: 32 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
                   <Text
-                    className="font-bold"
                     style={{
                       color: '#2C3E50',
                       fontSize: 28,
                       lineHeight: 34,
                       letterSpacing: -0.3,
+                      fontWeight: 'bold',
                     }}
                   >
                     Menu
                   </Text>
-                  <Pressable onPress={onClose} className="w-8 h-8 items-center justify-center">
+                  <Pressable 
+                    onPress={onClose} 
+                    style={{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }}
+                  >
                     <Ionicons name="close" size={24} color="#7F8C8D" />
                   </Pressable>
                 </View>
@@ -140,13 +136,16 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
               </View>
 
               {/* Menu Options */}
-              <View className="space-y-4">
+              <View>
                 {menuOptions.map((option, index) => (
                   <Pressable
                     key={option.id}
                     onPress={() => handleOptionPress(option.id)}
-                    className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 active:scale-95"
                     style={{
+                      backgroundColor: 'white',
+                      borderRadius: 16,
+                      padding: 20,
+                      marginBottom: 16,
                       shadowColor: option.color,
                       shadowOffset: { width: 0, height: 2 },
                       shadowOpacity: 0.1,
@@ -154,21 +153,29 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
                       elevation: 4,
                     }}
                   >
-                    <View className="flex-row items-center">
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <View
-                        className="w-12 h-12 rounded-full items-center justify-center mr-4"
-                        style={{ backgroundColor: `${option.color}15` }}
+                        style={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: 24,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginRight: 16,
+                          backgroundColor: `${option.color}15`,
+                        }}
                       >
                         <Ionicons name={option.icon as any} size={24} color={option.color} />
                       </View>
-                      <View className="flex-1">
+                      <View style={{ flex: 1 }}>
                         <Text
-                          className="font-semibold mb-1"
                           style={{
                             color: '#2C3E50',
                             fontSize: 18,
                             lineHeight: 24,
                             letterSpacing: -0.1,
+                            fontWeight: '600',
+                            marginBottom: 4,
                           }}
                         >
                           {option.title}
@@ -191,14 +198,14 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
               </View>
 
               {/* Footer */}
-              <View className="mt-8 pt-6 border-t border-gray-200">
+              <View style={{ marginTop: 32, paddingTop: 24, borderTopWidth: 1, borderTopColor: '#E5E7EB' }}>
                 <Text
-                  className="text-center"
                   style={{
                     color: '#95A5A6',
                     fontSize: 12,
                     lineHeight: 16,
                     letterSpacing: 0.2,
+                    textAlign: 'center',
                   }}
                 >
                   Heart Disease Reversal Protocol
@@ -207,6 +214,20 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
             </View>
           </LinearGradient>
         </Animated.View>
+
+        {/* Backdrop - Right side */}
+        <Pressable 
+          style={{ flex: 1 }}
+          onPress={onClose}
+        >
+          <Animated.View
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              opacity: backdropAnimation,
+            }}
+          />
+        </Pressable>
       </View>
     </Modal>
   );
