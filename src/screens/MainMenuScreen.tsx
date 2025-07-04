@@ -116,6 +116,43 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
       >
         <View style={{ width: '100%', maxWidth: 400 }}>
         
+        {/* Guidelines Button */}
+        <Pressable
+          onPress={() => handleMenuPress('Guidelines')}
+          style={{
+            backgroundColor: '#E74C3C',
+            borderRadius: 20,
+            padding: 20,
+            marginBottom: 12,
+            minHeight: 90,
+            width: '100%',
+          }}
+        >
+          <View style={{ alignItems: 'center' }}>
+            <Ionicons name="heart-outline" size={48} color="white" />
+            <Text style={{
+              color: 'white',
+              fontSize: 18,
+              lineHeight: 22,
+              fontWeight: '700',
+              marginTop: 12,
+              textAlign: 'center'
+            }}>
+              Guidelines
+            </Text>
+            <Text style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: 12,
+              lineHeight: 16,
+              fontWeight: '500',
+              marginTop: 4,
+              textAlign: 'center'
+            }}>
+              Dr. Esselstyn's heart protocol
+            </Text>
+          </View>
+        </Pressable>
+
         {/* Food Scanner Button */}
         <Pressable
           onPress={() => handleMenuPress('FoodAnalyzer')}
@@ -186,80 +223,6 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
               textAlign: 'center'
             }}>
               Track your 6 daily servings
-            </Text>
-          </View>
-        </Pressable>
-
-        {/* History Button */}
-        <Pressable
-          onPress={() => handleMenuPress('GreensHistory')}
-          style={{
-            backgroundColor: '#9B59B6',
-            borderRadius: 20,
-            padding: 20,
-            marginBottom: 12,
-            minHeight: 90,
-            width: '100%',
-          }}
-        >
-          <View style={{ alignItems: 'center' }}>
-            <Ionicons name="stats-chart-outline" size={48} color="white" />
-            <Text style={{
-              color: 'white',
-              fontSize: 18,
-              lineHeight: 22,
-              fontWeight: '700',
-              marginTop: 12,
-              textAlign: 'center'
-            }}>
-              History
-            </Text>
-            <Text style={{
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: 12,
-              lineHeight: 16,
-              fontWeight: '500',
-              marginTop: 4,
-              textAlign: 'center'
-            }}>
-              View your weekly progress
-            </Text>
-          </View>
-        </Pressable>
-
-        {/* Guidelines Button */}
-        <Pressable
-          onPress={() => handleMenuPress('Guidelines')}
-          style={{
-            backgroundColor: '#E74C3C',
-            borderRadius: 20,
-            padding: 20,
-            marginBottom: 12,
-            minHeight: 90,
-            width: '100%',
-          }}
-        >
-          <View style={{ alignItems: 'center' }}>
-            <Ionicons name="heart-outline" size={48} color="white" />
-            <Text style={{
-              color: 'white',
-              fontSize: 18,
-              lineHeight: 22,
-              fontWeight: '700',
-              marginTop: 12,
-              textAlign: 'center'
-            }}>
-              Guidelines
-            </Text>
-            <Text style={{
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: 12,
-              lineHeight: 16,
-              fontWeight: '500',
-              marginTop: 4,
-              textAlign: 'center'
-            }}>
-              Dr. Esselstyn's heart protocol
             </Text>
           </View>
         </Pressable>
