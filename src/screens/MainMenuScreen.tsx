@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -103,18 +103,29 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
         </View>
       </View>
 
-      <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 32 }}>
-        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center', marginBottom: 20 }}>DEBUG: Menu Items Count: {menuItems.length}</Text>
+      <ScrollView 
+        style={{ flex: 1 }} 
+        contentContainerStyle={{ 
+          paddingHorizontal: 24, 
+          paddingVertical: 20,
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100%'
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ width: '100%', maxWidth: 400 }}>
         
         {/* Food Scanner Button */}
         <Pressable
           onPress={() => handleMenuPress('FoodAnalyzer')}
           style={{
             backgroundColor: '#3498DB',
-            borderRadius: 24,
-            padding: 32,
-            marginBottom: 24,
-            minHeight: 140,
+            borderRadius: 20,
+            padding: 24,
+            marginBottom: 16,
+            minHeight: 120,
+            width: '100%',
           }}
         >
           <View style={{ alignItems: 'center' }}>
@@ -147,10 +158,11 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           onPress={() => handleMenuPress('GreensTracker')}
           style={{
             backgroundColor: '#16A085',
-            borderRadius: 24,
-            padding: 32,
-            marginBottom: 24,
-            minHeight: 140,
+            borderRadius: 20,
+            padding: 24,
+            marginBottom: 16,
+            minHeight: 120,
+            width: '100%',
           }}
         >
           <View style={{ alignItems: 'center' }}>
@@ -183,10 +195,11 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           onPress={() => handleMenuPress('GreensHistory')}
           style={{
             backgroundColor: '#9B59B6',
-            borderRadius: 24,
-            padding: 32,
-            marginBottom: 24,
-            minHeight: 140,
+            borderRadius: 20,
+            padding: 24,
+            marginBottom: 16,
+            minHeight: 120,
+            width: '100%',
           }}
         >
           <View style={{ alignItems: 'center' }}>
@@ -219,10 +232,11 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           onPress={() => handleMenuPress('Guidelines')}
           style={{
             backgroundColor: '#E74C3C',
-            borderRadius: 24,
-            padding: 32,
-            marginBottom: 24,
-            minHeight: 140,
+            borderRadius: 20,
+            padding: 24,
+            marginBottom: 16,
+            minHeight: 120,
+            width: '100%',
           }}
         >
           <View style={{ alignItems: 'center' }}>
@@ -250,7 +264,7 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           </View>
         </Pressable>
 
-        <View style={{ marginTop: 48, paddingHorizontal: 16 }}>
+        <View style={{ marginTop: 32, paddingHorizontal: 16 }}>
           <Text style={{
             color: '#7F8C8D',
             fontSize: 12,
@@ -260,7 +274,8 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
             All features follow Dr. Esselstyn"s heart disease reversal protocol
           </Text>
         </View>
-      </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
