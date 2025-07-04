@@ -47,7 +47,7 @@ export default function GreensRingProgress({
           }}
         />
 
-        {/* Progress Circle - Only show green when there's actual progress */}
+        {/* Progress Circle - Show precise segments */}
         {completed > 0 && (
           <View
             style={{
@@ -56,13 +56,11 @@ export default function GreensRingProgress({
               borderRadius: progressCircleSize / 2,
               position: 'absolute',
               transform: [{ rotate: '-90deg' }],
-              overflow: 'hidden',
             }}
           >
-            {/* Create individual segments for each serving */}
-            {Array.from({ length: completed }, (_, index) => (
+            {/* Segment 1 (0-60 degrees) */}
+            {completed >= 1 && (
               <View
-                key={index}
                 style={{
                   position: 'absolute',
                   width: progressCircleSize,
@@ -71,10 +69,107 @@ export default function GreensRingProgress({
                   borderWidth: strokeWidth,
                   borderColor: 'transparent',
                   borderTopColor: ringColor,
-                  transform: [{ rotate: `${index * 60}deg` }], // 360/6 = 60 degrees per serving
+                  borderRightColor: 'transparent',
+                  borderBottomColor: 'transparent',
+                  borderLeftColor: 'transparent',
+                  transform: [{ rotate: '0deg' }],
                 }}
               />
-            ))}
+            )}
+
+            {/* Segment 2 (60-120 degrees) */}
+            {completed >= 2 && (
+              <View
+                style={{
+                  position: 'absolute',
+                  width: progressCircleSize,
+                  height: progressCircleSize,
+                  borderRadius: progressCircleSize / 2,
+                  borderWidth: strokeWidth,
+                  borderColor: 'transparent',
+                  borderTopColor: 'transparent',
+                  borderRightColor: ringColor,
+                  borderBottomColor: 'transparent',
+                  borderLeftColor: 'transparent',
+                  transform: [{ rotate: '0deg' }],
+                }}
+              />
+            )}
+
+            {/* Segment 3 (120-180 degrees) */}
+            {completed >= 3 && (
+              <View
+                style={{
+                  position: 'absolute',
+                  width: progressCircleSize,
+                  height: progressCircleSize,
+                  borderRadius: progressCircleSize / 2,
+                  borderWidth: strokeWidth,
+                  borderColor: 'transparent',
+                  borderTopColor: 'transparent',
+                  borderRightColor: 'transparent',
+                  borderBottomColor: ringColor,
+                  borderLeftColor: 'transparent',
+                  transform: [{ rotate: '0deg' }],
+                }}
+              />
+            )}
+
+            {/* Segment 4 (180-240 degrees) */}
+            {completed >= 4 && (
+              <View
+                style={{
+                  position: 'absolute',
+                  width: progressCircleSize,
+                  height: progressCircleSize,
+                  borderRadius: progressCircleSize / 2,
+                  borderWidth: strokeWidth,
+                  borderColor: 'transparent',
+                  borderTopColor: 'transparent',
+                  borderRightColor: 'transparent',
+                  borderBottomColor: 'transparent',
+                  borderLeftColor: ringColor,
+                  transform: [{ rotate: '0deg' }],
+                }}
+              />
+            )}
+
+            {/* Segments 5 & 6 - Split the remaining 120 degrees */}
+            {completed >= 5 && (
+              <View
+                style={{
+                  position: 'absolute',
+                  width: progressCircleSize,
+                  height: progressCircleSize,
+                  borderRadius: progressCircleSize / 2,
+                  borderWidth: strokeWidth,
+                  borderColor: 'transparent',
+                  borderTopColor: ringColor,
+                  borderRightColor: 'transparent',
+                  borderBottomColor: 'transparent',
+                  borderLeftColor: 'transparent',
+                  transform: [{ rotate: '240deg' }], // Start at 240 degrees
+                }}
+              />
+            )}
+
+            {completed >= 6 && (
+              <View
+                style={{
+                  position: 'absolute',
+                  width: progressCircleSize,
+                  height: progressCircleSize,
+                  borderRadius: progressCircleSize / 2,
+                  borderWidth: strokeWidth,
+                  borderColor: 'transparent',
+                  borderTopColor: 'transparent',
+                  borderRightColor: ringColor,
+                  borderBottomColor: 'transparent',
+                  borderLeftColor: 'transparent',
+                  transform: [{ rotate: '240deg' }], // Complete the final segment
+                }}
+              />
+            )}
           </View>
         )}
 
