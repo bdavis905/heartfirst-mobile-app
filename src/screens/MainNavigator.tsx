@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import NewWelcomeScreen from './NewWelcomeScreen';
 import MedicalAgreementScreen from './MedicalAgreementScreen';
+import SimpleMedicalAgreement from './SimpleMedicalAgreement';
 import MainMenuScreen from './MainMenuScreen';
 import WelcomeScreen, { ScanType } from './WelcomeScreen';
 import FoodAnalyzerScreen from './FoodAnalyzerScreen';
@@ -17,7 +18,8 @@ export default function MainNavigator() {
   const [selectedScanType, setSelectedScanType] = useState<ScanType>('food_label');
 
   const handleGetStarted = () => {
-    setCurrentScreen('medical_agreement');
+    // Temporarily bypass medical agreement - go directly to main menu
+    setCurrentScreen('main_menu');
   };
 
   const handleMedicalAgreementAccept = () => {
