@@ -153,7 +153,7 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
                 borderRadius: 12,
                 marginVertical: 2,
               }}
-              className="active:bg-gray-50"
+              android_ripple={{ color: '#F9FAFB' }}
             >
               <View
                 style={{

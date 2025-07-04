@@ -49,7 +49,12 @@ export default function GreensHistoryScreen({ navigation }: GreensHistoryScreenP
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F9FA' }}>
       {/* Header */}
-      <View style={{ paddingTop: insets.top }} className="bg-white/90 border-b border-gray-200">
+      <View style={{ 
+        paddingTop: insets.top, 
+        backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+        borderBottomWidth: 1, 
+        borderBottomColor: '#E5E7EB' 
+      }}>
         <View style={{ 
           flexDirection: 'row', 
           alignItems: 'center', 

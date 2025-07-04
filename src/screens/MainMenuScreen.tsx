@@ -65,7 +65,12 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
       {/* Floating Menu */}
       <FloatingMenu onNavigate={handleFloatingMenuNavigate} />
       
-      <View style={{ paddingTop: insets.top }} className="bg-white/90 border-b border-gray-200">
+      <View style={{ 
+        paddingTop: insets.top, 
+        backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+        borderBottomWidth: 1, 
+        borderBottomColor: '#E5E7EB' 
+      }}>
         <View style={{ 
           flexDirection: 'row', 
           alignItems: 'center', 
