@@ -19,10 +19,13 @@ export default function GreensRingProgress({
   const isComplete = completed >= goal;
   const ringColor = isComplete ? '#2ECC71' : '#16A085';
 
-  // Simple circular progress using border
+  // Calculate actual progress based on completed servings
+  const actualProgress = Math.round((completed / goal) * 100);
   const progressCircleSize = size - strokeWidth;
-  const progressAngle = (progress / 100) * 360;
 
+  // More granular progress segments (every ~16.67% = 1 serving out of 6)
+  const segmentSize = 100 / goal; // Each serving is worth this percentage
+  
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <View style={{ 
@@ -44,22 +47,36 @@ export default function GreensRingProgress({
           }}
         />
 
-        {/* Progress Circle - Simple approach */}
-        <View
-          style={{
-            width: progressCircleSize,
-            height: progressCircleSize,
-            borderRadius: progressCircleSize / 2,
-            borderWidth: strokeWidth,
-            borderColor: 'transparent',
-            borderTopColor: ringColor,
-            borderRightColor: progress > 25 ? ringColor : 'transparent',
-            borderBottomColor: progress > 50 ? ringColor : 'transparent',
-            borderLeftColor: progress > 75 ? ringColor : 'transparent',
-            position: 'absolute',
-            transform: [{ rotate: '-90deg' }],
-          }}
-        />
+        {/* Progress Circle - Only show green when there's actual progress */}
+        {completed > 0 && (
+          <View
+            style={{
+              width: progressCircleSize,
+              height: progressCircleSize,
+              borderRadius: progressCircleSize / 2,
+              position: 'absolute',
+              transform: [{ rotate: '-90deg' }],
+              overflow: 'hidden',
+            }}
+          >
+            {/* Create individual segments for each serving */}
+            {Array.from({ length: completed }, (_, index) => (
+              <View
+                key={index}
+                style={{
+                  position: 'absolute',
+                  width: progressCircleSize,
+                  height: progressCircleSize,
+                  borderRadius: progressCircleSize / 2,
+                  borderWidth: strokeWidth,
+                  borderColor: 'transparent',
+                  borderTopColor: ringColor,
+                  transform: [{ rotate: `${index * 60}deg` }], // 360/6 = 60 degrees per serving
+                }}
+              />
+            ))}
+          </View>
+        )}
 
         {/* Center Content */}
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -132,7 +149,7 @@ export default function GreensRingProgress({
             textAlign: 'center',
           }}
         >
-          {progress}%
+          {actualProgress}%
         </Text>
         <Text
           style={{
