@@ -37,12 +37,7 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
       }),
     ]).start();
 
-    // Auto-enable button after 3 seconds for better UX
-    const timer = setTimeout(() => {
-      setIsBottomReached(true);
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    // Remove auto-enable timer - users must scroll to bottom
   }, []);
 
   useEffect(() => {
@@ -59,13 +54,13 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
   const handleScroll = (event: any) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
     
-    // More reliable progress calculation
+    // Calculate scroll progress
     const maxScroll = Math.max(0, contentSize.height - layoutMeasurement.height);
     const progress = maxScroll > 0 ? contentOffset.y / maxScroll : 1;
     setScrollProgress(Math.min(Math.max(progress, 0), 1));
     
-    // Check if user reached bottom or content doesn't need scrolling
-    if (progress >= 0.8 || maxScroll <= 10) {
+    // User must scroll to at least 95% to enable button (or content doesn't need scrolling)
+    if (progress >= 0.95 || maxScroll <= 10) {
       setIsBottomReached(true);
     }
   };
@@ -99,42 +94,124 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
     onClose();
   };
 
-  const medicalPoints = [
-    {
-      title: "Not Medical Advice",
-      content: "This application is for educational and informational purposes only. It does not provide medical advice, diagnosis, or treatment. The food analysis and nutritional information provided should not replace professional medical consultation.",
-      icon: "information-circle-outline"
-    },
-    {
-      title: "Consult Healthcare Professionals",
-      content: "Before making any dietary changes, especially if you have heart disease, diabetes, high blood pressure, or other medical conditions, consult with your physician, registered dietitian, or other qualified healthcare provider.",
-      icon: "medical-outline"
-    },
-    {
-      title: "Individual Results Vary",
-      content: "Dietary interventions affect individuals differently. Results may vary based on genetics, lifestyle, medical history, and adherence to recommendations. What works for one person may not be suitable for another.",
-      icon: "people-outline"
-    },
-    {
-      title: "Emergency Medical Situations",
-      content: "If you experience chest pain, shortness of breath, severe headache, or other medical emergencies, seek immediate professional medical attention. Do not rely on this app for emergency medical guidance.",
-      icon: "alert-circle-outline"
-    },
-    {
-      title: "Food Analysis Limitations",
-      content: "Food analysis results are based on available nutritional databases and may not be 100% accurate. Always read food labels and verify nutritional information independently.",
-      icon: "search-outline"
-    },
-    {
-      title: "Dr. Esselstyn's Protocol",
-      content: "This app references Dr. Caldwell Esselstyn's plant-based nutrition approach. While supported by research, it represents one dietary strategy among many. Individual medical needs may require different approaches.",
-      icon: "leaf-outline"
-    }
-  ];
+  const medicalDisclaimer = `MEDICAL DISCLAIMER AND TERMS OF USE
+
+IMPORTANT: READ CAREFULLY BEFORE USING THIS APPLICATION
+
+1. NOT MEDICAL ADVICE
+This application is for educational and informational purposes only. The content provided, including food analysis, nutritional information, and health-related recommendations, is not intended to be a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified healthcare provider with any questions you may have regarding a medical condition.
+
+2. NO DOCTOR-PATIENT RELATIONSHIP
+Use of this application does not create a doctor-patient relationship between you and the app developers, Dr. Caldwell Esselstyn, or any healthcare provider. This app does not provide medical consultations or personalized medical advice.
+
+3. CONSULT YOUR HEALTHCARE PROVIDER
+Before making any dietary changes, especially if you have:
+• Heart disease or cardiovascular conditions
+• Diabetes or blood sugar disorders
+• High blood pressure or hypertension
+• Food allergies or intolerances
+• Any chronic medical condition
+• Take medications that may interact with dietary changes
+
+Please consult with your physician, registered dietitian, or other qualified healthcare professional.
+
+4. EMERGENCY MEDICAL SITUATIONS
+If you experience any of the following symptoms, seek immediate emergency medical attention and do NOT rely on this app:
+• Chest pain or pressure
+• Shortness of breath or difficulty breathing
+• Severe headache or dizziness
+• Sudden weakness or numbness
+• Loss of consciousness
+• Severe allergic reactions
+
+Call emergency services (911) immediately for any life-threatening situations.
+
+5. INDIVIDUAL RESULTS VARY
+Dietary interventions and lifestyle changes affect individuals differently. Results may vary significantly based on:
+• Genetics and family history
+• Current health status
+• Lifestyle factors
+• Adherence to recommendations
+• Other medications or treatments
+• Age, gender, and activity level
+
+What works for one person may not be suitable or effective for another.
+
+6. FOOD ANALYSIS LIMITATIONS
+Food analysis results provided by this app are based on:
+• Available nutritional databases
+• Image recognition technology
+• General food composition data
+
+These results may not be 100% accurate and should not be relied upon for:
+• Precise calorie counting for medical purposes
+• Allergen detection for individuals with severe allergies
+• Exact nutritional content for specific brands or preparations
+• Medical dietary restrictions
+
+Always read food labels and verify nutritional information independently.
+
+7. DR. ESSELSTYN'S APPROACH
+This app references Dr. Caldwell Esselstyn's plant-based nutrition approach for heart disease reversal. While this approach is supported by published research and clinical experience, it represents one dietary strategy among many. Individual medical needs may require different nutritional approaches.
+
+8. NOT FDA APPROVED
+This application has not been evaluated by the Food and Drug Administration (FDA). The recommendations and information provided are not intended to diagnose, treat, cure, or prevent any disease.
+
+9. ASSUMPTION OF RISK
+By using this application, you acknowledge and assume all risks associated with:
+• Following dietary recommendations
+• Making lifestyle changes
+• Relying on app-generated information
+• Any adverse effects from dietary modifications
+
+10. LIMITATION OF LIABILITY
+The developers, Dr. Esselstyn, and associated parties shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or inability to use this application.
+
+11. ACCURACY OF INFORMATION
+While we strive to provide accurate and up-to-date information, we cannot guarantee the completeness, accuracy, or reliability of all content. Nutritional science is constantly evolving, and recommendations may change based on new research.
+
+12. CHILDREN AND SPECIAL POPULATIONS
+This app is designed for healthy adults. Special consideration should be given to:
+• Children and adolescents
+• Pregnant or breastfeeding women
+• Elderly individuals
+• Individuals with eating disorders
+• Those with compromised immune systems
+
+These populations should always consult healthcare providers before making dietary changes.
+
+13. SUPPLEMENT AND MEDICATION INTERACTIONS
+Plant-based diets may affect the absorption and effectiveness of certain medications and supplements. Consult your healthcare provider about potential interactions, especially if you take:
+• Blood thinners (warfarin, etc.)
+• Diabetes medications
+• Blood pressure medications
+• Thyroid medications
+• Any prescription medications
+
+14. MONITORING AND FOLLOW-UP
+If you have existing health conditions and choose to follow dietary recommendations from this app, regular monitoring by healthcare professionals is essential. This may include:
+• Regular blood tests
+• Blood pressure monitoring
+• Weight and body composition tracking
+• Symptom assessment
+
+15. DISCONTINUATION
+Stop using this app and consult a healthcare provider immediately if you experience:
+• Unexpected weight loss or gain
+• Persistent fatigue or weakness
+• Digestive issues
+• Any concerning symptoms
+• Worsening of existing conditions
+
+By continuing to use this application, you acknowledge that you have read, understood, and agree to be bound by this medical disclaimer and terms of use.
+
+Remember: Your health is your responsibility. This app is a tool to support your wellness journey, but it should never replace professional medical care and guidance.
+
+Last Updated: January 2025`;
 
   if (showSuccess) {
     return (
-      <View className="flex-1 bg-black/50 items-center justify-center">
+      <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', alignItems: 'center', justifyContent: 'center' }}>
         <Animated.View
           style={{
             opacity: checkmarkAnimation,
@@ -146,8 +223,13 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
                 }),
               },
             ],
+            width: 96,
+            height: 96,
+            backgroundColor: '#16A085',
+            borderRadius: 48,
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
-          className="w-24 h-24 bg-success rounded-full items-center justify-center"
         >
           <Ionicons name="checkmark" size={48} color="#FFFFFF" />
         </Animated.View>
@@ -156,132 +238,139 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
   }
 
   return (
-    <View className="flex-1">
+    <View style={{ flex: 1 }}>
       <Animated.View
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
           opacity: backdropAnimation,
         }}
-        className="absolute inset-0 bg-black/50"
       />
       
-      <View className="flex-1 justify-center items-center px-4">
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16 }}>
         <Animated.View
           style={{
-            transform: [
-              {
-                translateY: slideAnimation,
-              },
-            ],
+            transform: [{ translateY: slideAnimation }],
+            backgroundColor: 'white',
+            borderRadius: 20,
+            width: '100%',
+            maxWidth: 500,
+            maxHeight: '90%',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.15,
+            shadowRadius: 20,
+            elevation: 20,
           }}
-          className="bg-background-primary rounded-20dp w-full max-w-lg max-h-[90%] shadow-2xl"
         >
           {/* Header */}
-          <View className="p-24dp border-b border-background-tertiary">
-            <View className="flex-row items-center justify-between mb-4">
-              <View className="w-12 h-12 bg-secondary-green-pale rounded-full items-center justify-center">
+          <View style={{ 
+            padding: 24, 
+            borderBottomWidth: 1, 
+            borderBottomColor: '#F3F4F6' 
+          }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <View style={{ 
+                width: 48, 
+                height: 48, 
+                backgroundColor: '#E8F8F5', 
+                borderRadius: 24, 
+                alignItems: 'center', 
+                justifyContent: 'center' 
+              }}>
                 <Ionicons name="medical" size={24} color="#16A085" />
               </View>
-              <Pressable onPress={handleClose} className="w-10 h-10 items-center justify-center">
+              <Pressable onPress={handleClose} style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
                 <Ionicons name="close" size={24} color="#7F8C8D" />
               </Pressable>
             </View>
-            <Text className="text-h1 font-semibold text-text-primary mb-2">
+            <Text style={{
+              fontSize: 24,
+              lineHeight: 30,
+              fontWeight: '600',
+              color: '#2C3E50',
+              marginBottom: 8
+            }}>
               Medical Disclaimer
             </Text>
-            <Text className="text-body-regular text-text-secondary">
+            <Text style={{
+              fontSize: 14,
+              lineHeight: 20,
+              color: '#7F8C8D'
+            }}>
               Important information about using this health app
             </Text>
           </View>
 
           {/* Progress Bar */}
-          <View className="h-1 bg-background-tertiary">
+          <View style={{ height: 4, backgroundColor: '#F3F4F6' }}>
             <View
-              className="h-full bg-primary-green"
-              style={{ width: `${scrollProgress * 100}%` }}
+              style={{
+                height: '100%',
+                backgroundColor: '#16A085',
+                width: `${scrollProgress * 100}%`,
+                borderRadius: 2
+              }}
             />
           </View>
 
           {/* Content */}
           <ScrollView
-            className="flex-1 px-20dp"
+            style={{ flex: 1, paddingHorizontal: 24 }}
             onScroll={handleScroll}
             scrollEventThrottle={16}
-            showsVerticalScrollIndicator={false}
+            showsVerticalScrollIndicator={true}
           >
-            <View className="py-24dp">
-              <Text className="text-body-large text-text-secondary mb-24dp text-center">
-                Please read and acknowledge the following medical disclaimer before using this application.
+            <View style={{ paddingVertical: 24 }}>
+              <Text style={{
+                fontSize: 16,
+                lineHeight: 24,
+                color: '#7F8C8D',
+                marginBottom: 24,
+                textAlign: 'center'
+              }}>
+                Please read the complete medical disclaimer below. The accept button will appear after you scroll to the bottom.
               </Text>
 
-              {medicalPoints.map((point, index) => (
-                <View key={index} className="mb-16dp">
-                  <Pressable
-                    onPress={() => toggleSection(index)}
-                    className="flex-row items-start p-16dp bg-background-secondary rounded-12dp border border-background-tertiary"
-                  >
-                    <View className="w-10 h-10 bg-primary-green/10 rounded-full items-center justify-center mr-12dp mt-1">
-                      <Ionicons name={point.icon as any} size={18} color="#16A085" />
-                    </View>
-                    <View className="flex-1">
-                      <Text className="text-h4 font-medium text-text-primary mb-1">
-                        {point.title}
-                      </Text>
-                      <Text className="text-body-small text-text-secondary">
-                        Tap to {expandedSections.includes(index) ? 'hide' : 'read'} details
-                      </Text>
-                    </View>
-                    <Ionicons 
-                      name={expandedSections.includes(index) ? "chevron-up" : "chevron-down"} 
-                      size={20} 
-                      color="#7F8C8D" 
-                    />
-                  </Pressable>
-                  
-                  {expandedSections.includes(index) && (
-                    <View className="mt-8dp px-16dp py-12dp bg-background-primary rounded-8dp border-l-4 border-primary-green">
-                      <Text className="text-body-regular text-text-secondary leading-relaxed">
-                        {point.content}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              ))}
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 22,
+                color: '#2C3E50',
+                textAlign: 'left'
+              }}>
+                {medicalDisclaimer}
+              </Text>
 
-              <View className="bg-gradient-to-r from-secondary-green-pale to-primary-green/10 rounded-16dp p-20dp mt-24dp">
-                <View className="flex-row items-center mb-12dp">
-                  <Ionicons name="heart" size={20} color="#16A085" />
-                  <Text className="text-h4 font-semibold text-text-primary ml-8dp">
-                    Your Health Journey
-                  </Text>
-                </View>
-                <Text className="text-body-regular text-text-secondary leading-relaxed">
-                  This app supports your wellness goals by providing educational information about heart-healthy food choices based on Dr. Esselstyn's plant-based approach. Use it as a helpful tool alongside professional medical guidance for optimal health outcomes.
-                </Text>
-              </View>
-
-              <View className="h-32" />
+              <View style={{ height: 60 }} />
             </View>
           </ScrollView>
 
           {/* Bottom Action */}
-          <View className="p-24dp border-t border-background-tertiary">
+          <View style={{ 
+            padding: 24, 
+            borderTopWidth: 1, 
+            borderTopColor: '#F3F4F6' 
+          }}>
             <Animated.View
               style={{
                 opacity: buttonAnimation,
-                transform: [
-                  {
-                    scale: buttonAnimation,
-                  },
-                ],
+                transform: [{ scale: buttonAnimation }],
               }}
             >
               <Pressable
                 onPress={handleAccept}
                 disabled={!isBottomReached}
-                className="rounded-full items-center justify-center flex-row"
                 style={{
                   height: 56,
                   backgroundColor: isBottomReached ? '#16A085' : '#ECF0F1',
+                  borderRadius: 28,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
                   shadowColor: isBottomReached ? '#16A085' : 'transparent',
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.15,
@@ -295,31 +384,28 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
                   color={isBottomReached ? '#FFFFFF' : '#95A5A6'}
                   style={{ marginRight: 8 }}
                 />
-                <Text 
-                  className="font-semibold"
-                  style={{
-                    color: isBottomReached ? '#FFFFFF' : '#95A5A6',
-                    fontSize: 17,
-                    lineHeight: 24,
-                    letterSpacing: 0.1,
-                  }}
-                >
+                <Text style={{
+                  color: isBottomReached ? '#FFFFFF' : '#95A5A6',
+                  fontSize: 17,
+                  lineHeight: 24,
+                  fontWeight: '600',
+                  letterSpacing: 0.1,
+                }}>
                   I Acknowledge & Understand
                 </Text>
               </Pressable>
             </Animated.View>
             
             {!isBottomReached && (
-              <Text 
-                className="text-center mt-3"
-                style={{
-                  color: '#95A5A6',
-                  fontSize: 12,
-                  lineHeight: 16,
-                  letterSpacing: 0.2,
-                }}
-              >
-                Please review the disclaimer above • Button activates automatically
+              <Text style={{
+                textAlign: 'center',
+                marginTop: 12,
+                color: '#95A5A6',
+                fontSize: 12,
+                lineHeight: 16,
+                letterSpacing: 0.2,
+              }}>
+                Scroll to the bottom to enable the accept button
               </Text>
             )}
           </View>
