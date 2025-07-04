@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, Animated, Easing } from 'react-native';
-import Svg, { Circle, G } from 'react-native-svg';
+import React from 'react';
+import { View, Text } from 'react-native';
 
 interface GreensRingProgressProps {
   progress: number; // 0-100
@@ -10,8 +9,6 @@ interface GreensRingProgressProps {
   goal: number;
 }
 
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-
 export default function GreensRingProgress({ 
   progress, 
   size = 200, 
@@ -19,119 +16,101 @@ export default function GreensRingProgress({
   completed,
   goal 
 }: GreensRingProgressProps) {
-  const animatedValue = useRef(new Animated.Value(0)).current;
-  const circleRef = useRef<any>(null);
-
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const center = size / 2;
-
-  useEffect(() => {
-    Animated.timing(animatedValue, {
-      toValue: progress,
-      duration: 1000,
-      easing: Easing.out(Easing.ease),
-      useNativeDriver: false,
-    }).start();
-  }, [progress]);
-
-  useEffect(() => {
-    const listener = animatedValue.addListener(({ value }) => {
-      if (circleRef.current) {
-        const strokeDashoffset = circumference - (circumference * value) / 100;
-        circleRef.current.setNativeProps({
-          strokeDashoffset,
-        });
-      }
-    });
-
-    return () => animatedValue.removeListener(listener);
-  }, [circumference]);
-
   const isComplete = completed >= goal;
   const ringColor = isComplete ? '#2ECC71' : '#16A085';
-  const glowColor = isComplete ? '#2ECC7130' : '#16A08530';
+
+  // Simple circular progress using border
+  const progressCircleSize = size - strokeWidth;
+  const progressAngle = (progress / 100) * 360;
 
   return (
-    <View className="items-center justify-center">
-      <View style={{ width: size, height: size }} className="items-center justify-center">
-        <Svg width={size} height={size} className="absolute">
-          <G rotation="-90" origin={`${center}, ${center}`}>
-            {/* Background Circle */}
-            <Circle
-              cx={center}
-              cy={center}
-              r={radius}
-              stroke="#ECF0F1"
-              strokeWidth={strokeWidth}
-              fill="transparent"
-            />
-            
-            {/* Progress Circle */}
-            <AnimatedCircle
-              ref={circleRef}
-              cx={center}
-              cy={center}
-              r={radius}
-              stroke={ringColor}
-              strokeWidth={strokeWidth}
-              fill="transparent"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference}
-              strokeLinecap="round"
-              style={{
-                filter: `drop-shadow(0px 0px 8px ${glowColor})`,
-              }}
-            />
-          </G>
-        </Svg>
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ 
+        width: size, 
+        height: size, 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        position: 'relative',
+      }}>
+        {/* Background Circle */}
+        <View
+          style={{
+            width: progressCircleSize,
+            height: progressCircleSize,
+            borderRadius: progressCircleSize / 2,
+            borderWidth: strokeWidth,
+            borderColor: '#ECF0F1',
+            position: 'absolute',
+          }}
+        />
+
+        {/* Progress Circle - Simple approach */}
+        <View
+          style={{
+            width: progressCircleSize,
+            height: progressCircleSize,
+            borderRadius: progressCircleSize / 2,
+            borderWidth: strokeWidth,
+            borderColor: 'transparent',
+            borderTopColor: ringColor,
+            borderRightColor: progress > 25 ? ringColor : 'transparent',
+            borderBottomColor: progress > 50 ? ringColor : 'transparent',
+            borderLeftColor: progress > 75 ? ringColor : 'transparent',
+            position: 'absolute',
+            transform: [{ rotate: '-90deg' }],
+          }}
+        />
 
         {/* Center Content */}
-        <View className="absolute items-center justify-center">
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Text
-            className="font-light text-center"
             style={{
               color: ringColor,
               fontSize: 48,
               lineHeight: 56,
               letterSpacing: -1,
+              fontWeight: '300',
+              textAlign: 'center',
             }}
           >
             {completed}
           </Text>
           <Text
-            className="font-medium text-center"
             style={{
               color: '#7F8C8D',
               fontSize: 16,
               lineHeight: 20,
               letterSpacing: 0.1,
+              fontWeight: '500',
+              textAlign: 'center',
               marginTop: -4,
             }}
           >
             of {goal}
           </Text>
           <Text
-            className="font-medium text-center"
             style={{
               color: '#95A5A6',
               fontSize: 12,
               lineHeight: 16,
               letterSpacing: 0.2,
+              fontWeight: '500',
+              textAlign: 'center',
             }}
           >
             servings
           </Text>
           
           {isComplete && (
-            <View className="mt-2">
+            <View style={{ marginTop: 8 }}>
               <Text
-                className="font-semibold text-center"
                 style={{
                   color: '#2ECC71',
                   fontSize: 14,
                   lineHeight: 18,
                   letterSpacing: 0.1,
+                  fontWeight: '600',
+                  textAlign: 'center',
                 }}
               >
                 Goal Complete! 🎉
@@ -142,25 +121,27 @@ export default function GreensRingProgress({
       </View>
 
       {/* Progress Percentage */}
-      <View className="mt-4">
+      <View style={{ marginTop: 16 }}>
         <Text
-          className="font-semibold text-center"
           style={{
             color: '#2C3E50',
             fontSize: 24,
             lineHeight: 30,
             letterSpacing: -0.2,
+            fontWeight: '600',
+            textAlign: 'center',
           }}
         >
           {progress}%
         </Text>
         <Text
-          className="font-medium text-center"
           style={{
             color: '#7F8C8D',
             fontSize: 14,
             lineHeight: 18,
             letterSpacing: 0.1,
+            fontWeight: '500',
+            textAlign: 'center',
           }}
         >
           Daily Progress
