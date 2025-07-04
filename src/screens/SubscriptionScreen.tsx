@@ -165,6 +165,5 @@ export default function SubscriptionScreen({ onBack, onSubscribe }: Subscription
         </ScrollView>
       </LinearGradient>
     </View>
-    </View>
   );
 }
