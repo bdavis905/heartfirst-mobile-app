@@ -122,30 +122,30 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           style={{
             backgroundColor: '#3498DB',
             borderRadius: 20,
-            padding: 24,
-            marginBottom: 16,
-            minHeight: 120,
+            padding: 20,
+            marginBottom: 12,
+            minHeight: 90,
             width: '100%',
           }}
         >
           <View style={{ alignItems: 'center' }}>
-            <Ionicons name="camera-outline" size={64} color="white" />
+            <Ionicons name="camera-outline" size={48} color="white" />
             <Text style={{
               color: 'white',
-              fontSize: 20,
-              lineHeight: 26,
+              fontSize: 18,
+              lineHeight: 22,
               fontWeight: '700',
-              marginTop: 16,
+              marginTop: 12,
               textAlign: 'center'
             }}>
               Food Scanner
             </Text>
             <Text style={{
               color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: 14,
-              lineHeight: 18,
+              fontSize: 12,
+              lineHeight: 16,
               fontWeight: '500',
-              marginTop: 8,
+              marginTop: 4,
               textAlign: 'center'
             }}>
               Analyze your meals for heart health
@@ -159,30 +159,30 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           style={{
             backgroundColor: '#16A085',
             borderRadius: 20,
-            padding: 24,
-            marginBottom: 16,
-            minHeight: 120,
+            padding: 20,
+            marginBottom: 12,
+            minHeight: 90,
             width: '100%',
           }}
         >
           <View style={{ alignItems: 'center' }}>
-            <Ionicons name="leaf-outline" size={64} color="white" />
+            <Ionicons name="leaf-outline" size={48} color="white" />
             <Text style={{
               color: 'white',
-              fontSize: 20,
-              lineHeight: 26,
+              fontSize: 18,
+              lineHeight: 22,
               fontWeight: '700',
-              marginTop: 16,
+              marginTop: 12,
               textAlign: 'center'
             }}>
               Daily Greens
             </Text>
             <Text style={{
               color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: 14,
-              lineHeight: 18,
+              fontSize: 12,
+              lineHeight: 16,
               fontWeight: '500',
-              marginTop: 8,
+              marginTop: 4,
               textAlign: 'center'
             }}>
               Track your 6 daily servings
@@ -196,30 +196,30 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           style={{
             backgroundColor: '#9B59B6',
             borderRadius: 20,
-            padding: 24,
-            marginBottom: 16,
-            minHeight: 120,
+            padding: 20,
+            marginBottom: 12,
+            minHeight: 90,
             width: '100%',
           }}
         >
           <View style={{ alignItems: 'center' }}>
-            <Ionicons name="stats-chart-outline" size={64} color="white" />
+            <Ionicons name="stats-chart-outline" size={48} color="white" />
             <Text style={{
               color: 'white',
-              fontSize: 20,
-              lineHeight: 26,
+              fontSize: 18,
+              lineHeight: 22,
               fontWeight: '700',
-              marginTop: 16,
+              marginTop: 12,
               textAlign: 'center'
             }}>
               History
             </Text>
             <Text style={{
               color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: 14,
-              lineHeight: 18,
+              fontSize: 12,
+              lineHeight: 16,
               fontWeight: '500',
-              marginTop: 8,
+              marginTop: 4,
               textAlign: 'center'
             }}>
               View your weekly progress
@@ -233,30 +233,30 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           style={{
             backgroundColor: '#E74C3C',
             borderRadius: 20,
-            padding: 24,
-            marginBottom: 16,
-            minHeight: 120,
+            padding: 20,
+            marginBottom: 12,
+            minHeight: 90,
             width: '100%',
           }}
         >
           <View style={{ alignItems: 'center' }}>
-            <Ionicons name="heart-outline" size={64} color="white" />
+            <Ionicons name="heart-outline" size={48} color="white" />
             <Text style={{
               color: 'white',
-              fontSize: 20,
-              lineHeight: 26,
+              fontSize: 18,
+              lineHeight: 22,
               fontWeight: '700',
-              marginTop: 16,
+              marginTop: 12,
               textAlign: 'center'
             }}>
               Guidelines
             </Text>
             <Text style={{
               color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: 14,
-              lineHeight: 18,
+              fontSize: 12,
+              lineHeight: 16,
               fontWeight: '500',
-              marginTop: 8,
+              marginTop: 4,
               textAlign: 'center'
             }}>
               Dr. Esselstyn's heart protocol
@@ -264,7 +264,7 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
           </View>
         </Pressable>
 
-        <View style={{ marginTop: 32, paddingHorizontal: 16 }}>
+        <View style={{ marginTop: 32, paddingHorizontal: 16, paddingBottom: 60 }}>
           <Text style={{
             color: '#7F8C8D',
             fontSize: 12,
