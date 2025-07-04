@@ -36,8 +36,6 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
         useNativeDriver: true,
       }),
     ]).start();
-
-    // Remove auto-enable timer - users must scroll to bottom
   }, []);
 
   useEffect(() => {
@@ -51,7 +49,7 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
     }
   }, [isBottomReached]);
 
-  const handleScroll = (event: any) => {
+  const handleScroll = async (event: any) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
     
     // Calculate scroll progress
@@ -60,8 +58,10 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
     setScrollProgress(Math.min(Math.max(progress, 0), 1));
     
     // User must scroll to at least 95% to enable button (or content doesn't need scrolling)
-    if (progress >= 0.95 || maxScroll <= 10) {
+    if ((progress >= 0.95 || maxScroll <= 10) && !isBottomReached) {
       setIsBottomReached(true);
+      // Haptic feedback when user reaches the bottom
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
   };
 
@@ -323,13 +323,13 @@ Last Updated: January 2025`;
             style={{ 
               flex: 1, 
               paddingHorizontal: 24,
-              maxHeight: 400
+              height: 350
             }}
             onScroll={handleScroll}
             scrollEventThrottle={16}
             showsVerticalScrollIndicator={true}
           >
-            <View style={{ paddingVertical: 24 }}>
+            <View style={{ paddingTop: 24, paddingBottom: 80 }}>
               <Text style={{
                 fontSize: 16,
                 lineHeight: 24,
@@ -340,144 +340,174 @@ Last Updated: January 2025`;
                 Please read the complete medical disclaimer below. The accept button will appear after you scroll to the bottom.
               </Text>
 
-              <View style={{ gap: 16 }}>
-                <Text style={{
-                  fontSize: 16,
-                  fontWeight: '600',
-                  color: '#2C3E50',
-                  textAlign: 'center'
-                }}>
-                  MEDICAL DISCLAIMER AND TERMS OF USE
-                </Text>
-                
-                <Text style={{
-                  fontSize: 14,
-                  fontWeight: '600',
-                  color: '#E74C3C',
-                  textAlign: 'center'
-                }}>
-                  IMPORTANT: READ CAREFULLY BEFORE USING
-                </Text>
+              <Text style={{
+                fontSize: 16,
+                fontWeight: '600',
+                color: '#2C3E50',
+                textAlign: 'center',
+                marginBottom: 16
+              }}>
+                MEDICAL DISCLAIMER AND TERMS OF USE
+              </Text>
+              
+              <Text style={{
+                fontSize: 14,
+                fontWeight: '600',
+                color: '#E74C3C',
+                textAlign: 'center',
+                marginBottom: 20
+              }}>
+                IMPORTANT: READ CAREFULLY BEFORE USING
+              </Text>
 
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                1. NOT MEDICAL ADVICE{'\n'}
+                This application is for educational purposes only. It does not provide medical advice, diagnosis, or treatment. Always consult your physician before making dietary changes.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                2. EMERGENCY SITUATIONS{'\n'}
+                If you experience chest pain, shortness of breath, or other medical emergencies, call 911 immediately. Do not rely on this app for emergency guidance.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                3. CONSULT HEALTHCARE PROVIDERS{'\n'}
+                Before following any dietary recommendations, especially if you have heart disease, diabetes, high blood pressure, or take medications, consult your doctor or registered dietitian.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                4. INDIVIDUAL RESULTS VARY{'\n'}
+                Dietary changes affect everyone differently based on genetics, health status, and lifestyle. What works for one person may not work for another.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                5. FOOD ANALYSIS LIMITATIONS{'\n'}
+                Food analysis results may not be 100% accurate. Always read food labels and verify nutritional information independently, especially for allergies.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                6. DR. ESSELSTYN'S APPROACH{'\n'}
+                This app references Dr. Esselstyn's plant-based nutrition approach. While research-supported, individual medical needs may require different approaches.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                7. NOT FDA APPROVED{'\n'}
+                This application has not been evaluated by the FDA. It is not intended to diagnose, treat, cure, or prevent any disease.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                8. MEDICATION INTERACTIONS{'\n'}
+                Plant-based diets may affect medication absorption. Consult your healthcare provider about potential interactions, especially with blood thinners, diabetes, or heart medications.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                9. SPECIAL POPULATIONS{'\n'}
+                This app is designed for healthy adults. Children, pregnant women, elderly individuals, and those with eating disorders should consult healthcare providers first.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                10. ASSUMPTION OF RISK{'\n'}
+                By using this application, you acknowledge and assume all risks associated with following dietary recommendations and making lifestyle changes.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                11. LIMITATION OF LIABILITY{'\n'}
+                The developers and Dr. Esselstyn are not liable for any damages resulting from the use of this application.
+              </Text>
+
+              <Text style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#2C3E50',
+                marginBottom: 16
+              }}>
+                12. ACCURACY OF INFORMATION{'\n'}
+                While we strive to provide accurate information, we cannot guarantee completeness or reliability. Nutritional science evolves, and recommendations may change.
+              </Text>
+
+              <View style={{
+                backgroundColor: '#FFF3CD',
+                padding: 16,
+                borderRadius: 8,
+                borderLeftWidth: 4,
+                borderLeftColor: '#FFC107',
+                marginBottom: 16
+              }}>
                 <Text style={{
                   fontSize: 14,
                   lineHeight: 20,
-                  color: '#2C3E50'
+                  color: '#856404',
+                  fontWeight: '500'
                 }}>
-                  1. NOT MEDICAL ADVICE{'\n'}
-                  This application is for educational purposes only. It does not provide medical advice, diagnosis, or treatment. Always consult your physician before making dietary changes.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  2. EMERGENCY SITUATIONS{'\n'}
-                  If you experience chest pain, shortness of breath, or other medical emergencies, call 911 immediately. Do not rely on this app for emergency guidance.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  3. CONSULT HEALTHCARE PROVIDERS{'\n'}
-                  Before following any dietary recommendations, especially if you have heart disease, diabetes, high blood pressure, or take medications, consult your doctor or registered dietitian.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  4. INDIVIDUAL RESULTS VARY{'\n'}
-                  Dietary changes affect everyone differently based on genetics, health status, and lifestyle. What works for one person may not work for another.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  5. FOOD ANALYSIS LIMITATIONS{'\n'}
-                  Food analysis results may not be 100% accurate. Always read food labels and verify nutritional information independently, especially for allergies.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  6. DR. ESSELSTYN'S APPROACH{'\n'}
-                  This app references Dr. Esselstyn's plant-based nutrition approach. While research-supported, individual medical needs may require different approaches.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  7. NOT FDA APPROVED{'\n'}
-                  This application has not been evaluated by the FDA. It is not intended to diagnose, treat, cure, or prevent any disease.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  8. MEDICATION INTERACTIONS{'\n'}
-                  Plant-based diets may affect medication absorption. Consult your healthcare provider about potential interactions, especially with blood thinners, diabetes, or heart medications.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  9. SPECIAL POPULATIONS{'\n'}
-                  This app is designed for healthy adults. Children, pregnant women, elderly individuals, and those with eating disorders should consult healthcare providers first.
-                </Text>
-
-                <Text style={{
-                  fontSize: 14,
-                  lineHeight: 20,
-                  color: '#2C3E50'
-                }}>
-                  10. LIMITATION OF LIABILITY{'\n'}
-                  The developers and Dr. Esselstyn are not liable for any damages resulting from the use of this application.
-                </Text>
-
-                <View style={{
-                  backgroundColor: '#FFF3CD',
-                  padding: 16,
-                  borderRadius: 8,
-                  borderLeftWidth: 4,
-                  borderLeftColor: '#FFC107'
-                }}>
-                  <Text style={{
-                    fontSize: 14,
-                    lineHeight: 20,
-                    color: '#856404',
-                    fontWeight: '500'
-                  }}>
-                    By continuing to use this application, you acknowledge that you have read, understood, and agree to be bound by this medical disclaimer.{'\n\n'}
-                    Remember: This app is a tool to support your wellness journey, but it should never replace professional medical care.
-                  </Text>
-                </View>
-
-                <Text style={{
-                  fontSize: 12,
-                  color: '#7F8C8D',
-                  textAlign: 'center',
-                  fontStyle: 'italic'
-                }}>
-                  Last Updated: January 2025
+                  By continuing to use this application, you acknowledge that you have read, understood, and agree to be bound by this medical disclaimer.{'\n\n'}
+                  Remember: This app is a tool to support your wellness journey, but it should never replace professional medical care.
                 </Text>
               </View>
 
-              <View style={{ height: 60 }} />
+              <Text style={{
+                fontSize: 12,
+                color: '#7F8C8D',
+                textAlign: 'center',
+                fontStyle: 'italic',
+                marginBottom: 40
+              }}>
+                Last Updated: January 2025
+              </Text>
             </View>
           </ScrollView>
 
