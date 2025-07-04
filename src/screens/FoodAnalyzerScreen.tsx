@@ -3,8 +3,8 @@ import { View, Text, Pressable, Image } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions, CameraViewRef } from 'expo-camera';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { cn } from '../utils/cn';
-import { getOpenAITextResponse } from '../api/chat-service';
 
 type AnalysisResult = {
   status: 'compliant' | 'not_compliant' | 'caution';
@@ -54,6 +54,9 @@ export default function FoodAnalyzerScreen() {
     if (!cameraRef.current) return;
 
     try {
+      // Haptic feedback for photo capture
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      
       const photo = await cameraRef.current.takePictureAsync({
         quality: 0.8,
         base64: true,
@@ -73,39 +76,46 @@ export default function FoodAnalyzerScreen() {
     setAnalysisResult(null);
 
     try {
-      const prompt = "Analyze this food item for Dr. Esselstyn's heart disease reversal protocol. Check for oil, dairy, meat, added sugars, and high sodium. Return only compliant with a green checkmark, Not compliant with a red X and a reason, or caution with the yellow warning with explanation.";
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const response = await getOpenAITextResponse([
+      // Mock responses for different scenarios
+      const mockResponses = [
         {
-          role: "user",
-          content: [
-            { type: "text", text: prompt },
-            {
-              type: "image_url",
-              image_url: {
-                url: `data:image/jpeg;base64,${base64Image}`,
-              },
-            },
-          ],
+          status: 'compliant' as const,
+          explanation: "✅ Great choice! This food item is compliant with Dr. Esselstyn's heart disease reversal protocol. It contains no oil, dairy, meat, added sugars, or excessive sodium. This whole food, plant-based option supports heart health and disease reversal."
         },
-      ]);
+        {
+          status: 'not_compliant' as const,
+          explanation: "❌ This food item is NOT compliant with Dr. Esselstyn's protocol. It contains oil and dairy, which are not allowed on the program. These ingredients can contribute to arterial plaque buildup and interfere with heart disease reversal. Consider choosing whole, plant-based alternatives."
+        },
+        {
+          status: 'caution' as const,
+          explanation: "⚠️ Caution advised with this food item. While it may not contain obvious non-compliant ingredients, it appears to have added sugars and higher sodium content. Check the ingredient list carefully and consider limiting consumption. Look for versions with no added sugars or salt."
+        },
+        {
+          status: 'not_compliant' as const,
+          explanation: "❌ This processed food contains multiple non-compliant ingredients including oil, meat, and high sodium levels. These ingredients are strictly avoided on Dr. Esselstyn's protocol as they can promote inflammation and cardiovascular disease progression."
+        },
+        {
+          status: 'caution' as const,
+          explanation: "⚠️ This item needs careful consideration. While plant-based, it may contain oils or excessive sodium. Dr. Esselstyn's protocol requires avoiding all added oils, even plant-based ones. Check labels for oil-free versions or consider making homemade alternatives."
+        }
+      ];
 
-      // Parse the response to determine status
-      const content = response.content.toLowerCase();
-      let status: 'compliant' | 'not_compliant' | 'caution' = 'caution';
+      // Randomly select a mock response
+      const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
       
-      if (content.includes('compliant') && !content.includes('not compliant')) {
-        status = 'compliant';
-      } else if (content.includes('not compliant') || content.includes('red x')) {
-        status = 'not_compliant';
-      } else if (content.includes('caution') || content.includes('yellow warning')) {
-        status = 'caution';
+      // Haptic feedback for result
+      if (randomResponse.status === 'compliant') {
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      } else if (randomResponse.status === 'not_compliant') {
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      } else {
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
       }
 
-      setAnalysisResult({
-        status,
-        explanation: response.content,
-      });
+      setAnalysisResult(randomResponse);
     } catch (error) {
       console.error('Error analyzing image:', error);
       setAnalysisResult({
@@ -184,9 +194,17 @@ export default function FoodAnalyzerScreen() {
               <View className="items-center mb-6">
                 {getStatusIcon(analysisResult.status)}
               </View>
-              <Text className="text-gray-800 text-base leading-relaxed text-center">
+              <Text className="text-gray-800 text-base leading-relaxed text-center mb-8">
                 {analysisResult.explanation}
               </Text>
+              <Pressable
+                onPress={resetAnalysis}
+                className="bg-blue-500 rounded-xl py-4 px-6"
+              >
+                <Text className="text-white font-semibold text-center">
+                  Scan Another Item
+                </Text>
+              </Pressable>
             </View>
           ) : null}
         </View>
