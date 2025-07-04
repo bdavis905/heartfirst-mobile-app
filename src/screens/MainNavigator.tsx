@@ -111,7 +111,9 @@ export default function MainNavigator() {
 
   if (currentScreen === 'greens_history') {
     return (
-      <GreensHistoryScreen />
+      <GreensHistoryScreen 
+        navigation={{ goBack: handleBackToMainMenu }}
+      />
     );
   }
 

@@ -11,142 +11,132 @@ interface MainMenuScreenProps {
 export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
   const insets = useSafeAreaInsets();
 
-  const handleMenuPress = (screenName: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  const handleMenuPress = async (screenName: string) => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     navigation.navigate(screenName);
   };
 
   const menuItems = [
     {
-      title: 'Guidelines',
-      subtitle: 'Dr. Esselstyn\'s Protocol',
-      icon: 'heart-outline',
-      color: '#E74C3C',
-      screen: 'Guidelines',
-    },
-    {
       title: 'Food Scanner',
-      subtitle: 'Analyze your meals',
+      subtitle: 'Analyze your meals for heart health',
       icon: 'camera-outline',
       color: '#3498DB',
       screen: 'FoodAnalyzer',
     },
     {
       title: 'Daily Greens',
-      subtitle: 'Track your 6 servings',
+      subtitle: 'Track your 6 daily servings',
       icon: 'leaf-outline',
       color: '#16A085',
       screen: 'GreensTracker',
     },
     {
       title: 'History',
-      subtitle: 'Your progress over time',
+      subtitle: 'View your weekly progress',
       icon: 'stats-chart-outline',
       color: '#9B59B6',
       screen: 'GreensHistory',
     },
+    {
+      title: 'Guidelines',
+      subtitle: 'Dr. Esselstyn\'s heart protocol',
+      icon: 'heart-outline',
+      color: '#E74C3C',
+      screen: 'Guidelines',
+    },
   ];
 
   return (
-    <View style={{ 
-      flex: 1, 
-      backgroundColor: '#F8F9FA',
-      paddingTop: insets.top,
-    }}>
-      {/* Header */}
-      <View style={{
-        paddingHorizontal: 24,
-        paddingVertical: 32,
-        alignItems: 'center',
-      }}>
-        <Text style={{
-          fontSize: 32,
-          lineHeight: 38,
-          fontWeight: '700',
-          color: '#2C3E50',
-          textAlign: 'center',
-          marginBottom: 8,
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={{ paddingTop: insets.top }} className="bg-white/90 border-b border-gray-200">
+        <View style={{ 
+          flexDirection: 'row', 
+          alignItems: 'center', 
+          paddingHorizontal: 24, 
+          paddingVertical: 20 
         }}>
-          Heart Health Hub
-        </Text>
-        <Text style={{
-          fontSize: 16,
-          lineHeight: 22,
-          fontWeight: '500',
-          color: '#7F8C8D',
-          textAlign: 'center',
-        }}>
-          Your journey to cardiovascular wellness
-        </Text>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text 
+              style={{
+                color: '#2C3E50',
+                fontSize: 28,
+                lineHeight: 34,
+                letterSpacing: -0.3,
+                fontWeight: '600'
+              }}
+            >
+              Heart Health Hub
+            </Text>
+            <Text 
+              style={{
+                color: '#7F8C8D',
+                fontSize: 15,
+                lineHeight: 22,
+                marginTop: 8
+              }}
+            >
+              Your journey to cardiovascular wellness
+            </Text>
+          </View>
+        </View>
       </View>
 
-      {/* Menu Items */}
-      <View style={{
-        flex: 1,
-        paddingHorizontal: 24,
-        paddingBottom: insets.bottom + 24,
-      }}>
-        {menuItems.map((item, index) => (
-          <Pressable
-            key={item.screen}
-            onPress={() => handleMenuPress(item.screen)}
-            style={({ pressed }) => ({
-              backgroundColor: pressed ? '#ECF0F1' : 'white',
-              borderRadius: 16,
-              padding: 24,
-              marginBottom: 16,
-              flexDirection: 'row',
-              alignItems: 'center',
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 3,
-            })}
-          >
-            <View style={{
-              width: 56,
-              height: 56,
-              borderRadius: 28,
-              backgroundColor: item.color + '15',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginRight: 16,
-            }}>
-              <Ionicons 
-                name={item.icon as any} 
-                size={28} 
-                color={item.color} 
-              />
-            </View>
-            
-            <View style={{ flex: 1 }}>
-              <Text style={{
-                fontSize: 18,
-                lineHeight: 24,
-                fontWeight: '600',
-                color: '#2C3E50',
-                marginBottom: 4,
-              }}>
-                {item.title}
-              </Text>
-              <Text style={{
-                fontSize: 14,
-                lineHeight: 18,
-                fontWeight: '500',
-                color: '#7F8C8D',
-              }}>
-                {item.subtitle}
-              </Text>
-            </View>
-            
-            <Ionicons 
-              name="chevron-forward" 
-              size={20} 
-              color="#BDC3C7" 
-            />
-          </Pressable>
-        ))}
+      <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 32, justifyContent: 'center' }}>
+        <View style={{ gap: 24 }}>
+          {menuItems.map((item, index) => (
+            <Pressable
+              key={item.screen}
+              onPress={() => handleMenuPress(item.screen)}
+              style={({ pressed }) => ({
+                backgroundColor: item.color,
+                borderRadius: 24,
+                padding: 32,
+                shadowColor: item.color,
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.15,
+                shadowRadius: 12,
+                elevation: 8,
+                transform: [{ scale: pressed ? 0.95 : 1 }],
+              })}
+            >
+              <View style={{ alignItems: 'center' }}>
+                <Ionicons name={item.icon as any} size={64} color="white" />
+                <Text style={{
+                  color: 'white',
+                  fontSize: 20,
+                  lineHeight: 26,
+                  fontWeight: '700',
+                  marginTop: 16,
+                  textAlign: 'center'
+                }}>
+                  {item.title}
+                </Text>
+                <Text style={{
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontSize: 14,
+                  lineHeight: 18,
+                  fontWeight: '500',
+                  marginTop: 8,
+                  textAlign: 'center'
+                }}>
+                  {item.subtitle}
+                </Text>
+              </View>
+            </Pressable>
+          ))}
+        </View>
+
+        <View style={{ marginTop: 48, paddingHorizontal: 16 }}>
+          <Text style={{
+            color: '#7F8C8D',
+            fontSize: 12,
+            lineHeight: 16,
+            textAlign: 'center'
+          }}>
+            All features follow Dr. Esselstyn"s heart disease reversal protocol
+          </Text>
+        </View>
       </View>
     </View>
   );

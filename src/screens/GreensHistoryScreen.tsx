@@ -1,9 +1,17 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { useGreensTrackerStore } from '../state/greensTrackerStore';
 
-export default function GreensHistoryScreen() {
+interface GreensHistoryScreenProps {
+  navigation?: {
+    goBack: () => void;
+  };
+}
+
+export default function GreensHistoryScreen({ navigation }: GreensHistoryScreenProps) {
   const insets = useSafeAreaInsets();
   const { getWeeklyData } = useGreensTrackerStore();
   
@@ -41,27 +49,56 @@ export default function GreensHistoryScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F9FA' }}>
       {/* Header */}
-      <View style={{ paddingTop: insets.top, backgroundColor: 'white', borderBottomWidth: 1, borderBottomColor: '#E9ECEF' }}>
-        <View style={{ paddingHorizontal: 24, paddingVertical: 20, alignItems: 'center' }}>
-          <Text style={{
-            color: '#2C3E50',
-            fontSize: 28,
-            lineHeight: 34,
-            letterSpacing: -0.3,
-            fontWeight: '600',
-            textAlign: 'center',
-          }}>
-            Green Tracking History
-          </Text>
-          <Text style={{
-            color: '#7F8C8D',
-            fontSize: 15,
-            lineHeight: 22,
-            marginTop: 8,
-            textAlign: 'center',
-          }}>
-            Your daily greens progress this week
-          </Text>
+      <View style={{ paddingTop: insets.top }} className="bg-white/90 border-b border-gray-200">
+        <View style={{ 
+          flexDirection: 'row', 
+          alignItems: 'center', 
+          paddingHorizontal: 24, 
+          paddingVertical: 20 
+        }}>
+          {navigation && (
+            <Pressable
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.6 : 1,
+                marginRight: 16,
+                padding: 8,
+                marginLeft: -8,
+              })}
+            >
+              <Ionicons name="chevron-back" size={24} color="#16A085" />
+            </Pressable>
+          )}
+          
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text 
+              style={{
+                color: '#2C3E50',
+                fontSize: 28,
+                lineHeight: 34,
+                letterSpacing: -0.3,
+                fontWeight: '600'
+              }}
+            >
+              Greens History
+            </Text>
+            <Text 
+              style={{
+                color: '#7F8C8D',
+                fontSize: 15,
+                lineHeight: 22,
+                marginTop: 8
+              }}
+            >
+              Your weekly progress tracking
+            </Text>
+          </View>
+          
+          {/* Spacer to balance the back button */}
+          <View style={{ width: 40 }} />
         </View>
       </View>
 
