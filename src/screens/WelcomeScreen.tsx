@@ -107,8 +107,8 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
         </View>
       </View>
 
-      <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 32, justifyContent: 'center' }}>
-        <View style={{ flexDirection: 'column' }}>
+      <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 20 }}>
+        <View style={{ flexDirection: 'column', paddingTop: 20 }}>
           {/* Barcode Scanner */}
           <Pressable
             onPress={() => handleScanTypeSelect('barcode')}
@@ -119,18 +119,19 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
               shadowOpacity: 0.15,
               shadowRadius: 12,
               elevation: 8,
-              borderRadius: 24,
-              padding: 32,
+              borderRadius: 20,
+              padding: 24,
               transform: [{ scale: pressed ? 0.95 : 1 }],
-              marginBottom: 24
+              marginBottom: 16,
+              minHeight: 120
             })}
           >
             <View style={{ alignItems: 'center' }}>
-              <Ionicons name="barcode-outline" size={64} color="white" />
-              <Text style={{ color: 'white', fontWeight: '700', fontSize: 20, lineHeight: 26, marginTop: 16 }}>
+              <Ionicons name="barcode-outline" size={48} color="white" />
+              <Text style={{ color: 'white', fontWeight: '700', fontSize: 18, lineHeight: 22, marginTop: 12 }}>
                 Scan Barcode
               </Text>
-              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 8, fontSize: 14, lineHeight: 18 }}>
+              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 6, fontSize: 12, lineHeight: 16 }}>
                 Quick compliance check for packaged foods
               </Text>
             </View>
@@ -146,18 +147,19 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
               shadowOpacity: 0.15,
               shadowRadius: 12,
               elevation: 8,
-              borderRadius: 24,
-              padding: 32,
+              borderRadius: 20,
+              padding: 24,
               transform: [{ scale: pressed ? 0.95 : 1 }],
-              marginBottom: 24
+              marginBottom: 16,
+              minHeight: 120
             })}
           >
             <View style={{ alignItems: 'center' }}>
-              <Ionicons name="nutrition-outline" size={64} color="white" />
-              <Text style={{ color: 'white', fontWeight: '700', fontSize: 20, lineHeight: 26, marginTop: 16 }}>
+              <Ionicons name="nutrition-outline" size={48} color="white" />
+              <Text style={{ color: 'white', fontWeight: '700', fontSize: 18, lineHeight: 22, marginTop: 12 }}>
                 Scan Food Label
               </Text>
-              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 8, fontSize: 14, lineHeight: 18 }}>
+              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 6, fontSize: 12, lineHeight: 16 }}>
                 Analyze ingredients and nutrition information
               </Text>
             </View>
@@ -173,18 +175,19 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
               shadowOpacity: 0.15,
               shadowRadius: 12,
               elevation: 8,
-              borderRadius: 24,
-              padding: 32,
+              borderRadius: 20,
+              padding: 24,
               transform: [{ scale: pressed ? 0.95 : 1 }],
-              marginBottom: 24
+              marginBottom: 16,
+              minHeight: 120
             })}
           >
             <View style={{ alignItems: 'center' }}>
-              <Ionicons name="restaurant-outline" size={64} color="white" />
-              <Text style={{ color: 'white', fontWeight: '700', fontSize: 20, lineHeight: 26, marginTop: 16 }}>
+              <Ionicons name="restaurant-outline" size={48} color="white" />
+              <Text style={{ color: 'white', fontWeight: '700', fontSize: 18, lineHeight: 22, marginTop: 12 }}>
                 Scan Restaurant Menu
               </Text>
-              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 8, fontSize: 14, lineHeight: 18 }}>
+              <Text style={{ color: 'rgba(255, 255, 255, 0.8)', textAlign: 'center', marginTop: 6, fontSize: 12, lineHeight: 16 }}>
                 Get recommendations and modification suggestions
               </Text>
             </View>
