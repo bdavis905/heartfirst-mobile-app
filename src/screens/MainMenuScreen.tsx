@@ -249,7 +249,6 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
             </Text>
           </View>
         </Pressable>
-        </View>
 
         <View style={{ marginTop: 48, paddingHorizontal: 16 }}>
           <Text style={{
