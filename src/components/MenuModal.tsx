@@ -11,35 +11,47 @@ interface MenuModalProps {
 }
 
 export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps) {
-  const slideAnimation = useRef(new Animated.Value(-300)).current;
-  const backdropAnimation = useRef(new Animated.Value(0)).current;
+  const scaleAnimation = useRef(new Animated.Value(0)).current;
+  const opacityAnimation = useRef(new Animated.Value(0)).current;
+  const slideAnimation = useRef(new Animated.Value(-20)).current;
 
   useEffect(() => {
     if (visible) {
       Animated.parallel([
-        Animated.timing(backdropAnimation, {
+        Animated.timing(opacityAnimation, {
           toValue: 1,
-          duration: 250,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.spring(scaleAnimation, {
+          toValue: 1,
+          damping: 15,
+          mass: 1,
+          stiffness: 150,
           useNativeDriver: true,
         }),
         Animated.timing(slideAnimation, {
           toValue: 0,
-          duration: 300,
+          duration: 250,
           easing: Easing.out(Easing.ease),
           useNativeDriver: true,
         }),
       ]).start();
     } else {
       Animated.parallel([
-        Animated.timing(backdropAnimation, {
+        Animated.timing(opacityAnimation, {
           toValue: 0,
-          duration: 200,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnimation, {
+          toValue: 0,
+          duration: 150,
           useNativeDriver: true,
         }),
         Animated.timing(slideAnimation, {
-          toValue: -300,
-          duration: 250,
-          easing: Easing.in(Easing.ease),
+          toValue: -20,
+          duration: 150,
           useNativeDriver: true,
         }),
       ]).start();
@@ -52,6 +64,13 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
   };
 
   const menuOptions = [
+    {
+      id: 'guidelines' as const,
+      title: 'Guidelines',
+      subtitle: 'Dr. Esselstyn\'s protocol',
+      icon: 'book-outline',
+      color: '#3498DB',
+    },
     {
       id: 'scanner' as const,
       title: 'Food Scanner',
@@ -66,13 +85,6 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
       icon: 'leaf-outline',
       color: '#27AE60',
     },
-    {
-      id: 'guidelines' as const,
-      title: 'Guidelines',
-      subtitle: 'Dr. Esselstyn\'s protocol',
-      icon: 'book-outline',
-      color: '#3498DB',
-    },
   ];
 
   return (
@@ -82,153 +94,139 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
       animationType="none"
       onRequestClose={onClose}
     >
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-        {/* Menu Panel */}
+      {/* Invisible backdrop */}
+      <Pressable 
+        style={{ flex: 1 }}
+        onPress={onClose}
+      >
         <Animated.View
           style={{
-            transform: [{ translateX: slideAnimation }],
-            width: 320,
-            backgroundColor: 'white',
-            shadowColor: '#000',
-            shadowOffset: { width: 2, height: 0 },
-            shadowOpacity: 0.25,
-            shadowRadius: 8,
-            elevation: 10,
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.1)',
+            opacity: opacityAnimation,
           }}
-          className="flex-1"
+        />
+      </Pressable>
+
+      {/* Dropdown Menu Panel */}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          top: 80,
+          right: 20,
+          width: 280,
+          transform: [
+            { scale: scaleAnimation },
+            { translateY: slideAnimation }
+          ],
+          opacity: opacityAnimation,
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: 'white',
+            borderRadius: 16,
+            padding: 8,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.15,
+            shadowRadius: 20,
+            elevation: 15,
+          }}
         >
-          <LinearGradient
-            colors={['#FFFFFF', '#E8F6F3']}
-            locations={[0, 1]}
-            style={{ flex: 1 }}
-          >
-            <View style={{ flex: 1, paddingTop: 80, paddingHorizontal: 24 }}>
-              {/* Header */}
-              <View style={{ marginBottom: 32 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-                  <Text
-                    style={{
-                      color: '#2C3E50',
-                      fontSize: 28,
-                      lineHeight: 34,
-                      letterSpacing: -0.3,
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    Menu
-                  </Text>
-                  <Pressable 
-                    onPress={onClose} 
-                    style={{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }}
-                  >
-                    <Ionicons name="close" size={24} color="#7F8C8D" />
-                  </Pressable>
-                </View>
+          {/* Menu Options */}
+          {menuOptions.map((option, index) => (
+            <Pressable
+              key={option.id}
+              onPress={() => handleOptionPress(option.id)}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                padding: 16,
+                borderRadius: 12,
+                marginVertical: 2,
+              }}
+              className="active:bg-gray-50"
+            >
+              <View
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: 12,
+                  backgroundColor: `${option.color}15`,
+                }}
+              >
+                <Ionicons name={option.icon as any} size={20} color={option.color} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    color: '#2C3E50',
+                    fontSize: 16,
+                    lineHeight: 20,
+                    fontWeight: '600',
+                    marginBottom: 2,
+                  }}
+                >
+                  {option.title}
+                </Text>
                 <Text
                   style={{
                     color: '#7F8C8D',
-                    fontSize: 15,
-                    lineHeight: 22,
-                  }}
-                >
-                  Navigate through your heart-healthy journey
-                </Text>
-              </View>
-
-              {/* Menu Options */}
-              <View>
-                {menuOptions.map((option, index) => (
-                  <Pressable
-                    key={option.id}
-                    onPress={() => handleOptionPress(option.id)}
-                    style={{
-                      backgroundColor: 'white',
-                      borderRadius: 16,
-                      padding: 20,
-                      marginBottom: 16,
-                      shadowColor: option.color,
-                      shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: 0.1,
-                      shadowRadius: 8,
-                      elevation: 4,
-                    }}
-                  >
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <View
-                        style={{
-                          width: 48,
-                          height: 48,
-                          borderRadius: 24,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          marginRight: 16,
-                          backgroundColor: `${option.color}15`,
-                        }}
-                      >
-                        <Ionicons name={option.icon as any} size={24} color={option.color} />
-                      </View>
-                      <View style={{ flex: 1 }}>
-                        <Text
-                          style={{
-                            color: '#2C3E50',
-                            fontSize: 18,
-                            lineHeight: 24,
-                            letterSpacing: -0.1,
-                            fontWeight: '600',
-                            marginBottom: 4,
-                          }}
-                        >
-                          {option.title}
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#7F8C8D',
-                            fontSize: 13,
-                            lineHeight: 18,
-                            letterSpacing: 0.1,
-                          }}
-                        >
-                          {option.subtitle}
-                        </Text>
-                      </View>
-                      <Ionicons name="chevron-forward" size={20} color="#95A5A6" />
-                    </View>
-                  </Pressable>
-                ))}
-              </View>
-
-              {/* Footer */}
-              <View style={{ marginTop: 32, paddingTop: 24, borderTopWidth: 1, borderTopColor: '#E5E7EB' }}>
-                <Text
-                  style={{
-                    color: '#95A5A6',
                     fontSize: 12,
                     lineHeight: 16,
-                    letterSpacing: 0.2,
-                    textAlign: 'center',
                   }}
                 >
-                  Heart Disease Reversal Protocol
+                  {option.subtitle}
                 </Text>
               </View>
-            </View>
-          </LinearGradient>
-        </Animated.View>
+              <Ionicons name="chevron-forward" size={16} color="#95A5A6" />
+            </Pressable>
+          ))}
 
-        {/* Backdrop - Right side */}
-        <Pressable 
-          style={{ flex: 1 }}
-          onPress={onClose}
-        >
-          <Animated.View
-            style={{
-              flex: 1,
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              opacity: backdropAnimation,
-            }}
-          />
-        </Pressable>
-      </View>
+          {/* Small footer */}
+          <View style={{ 
+            borderTopWidth: 1, 
+            borderTopColor: '#F3F4F6', 
+            marginTop: 8, 
+            paddingTop: 12, 
+            paddingHorizontal: 16 
+          }}>
+            <Text
+              style={{
+                color: '#95A5A6',
+                fontSize: 10,
+                lineHeight: 14,
+                textAlign: 'center',
+                letterSpacing: 0.5,
+              }}
+            >
+              HEART DISEASE REVERSAL
+            </Text>
+          </View>
+        </View>
+
+        {/* Arrow pointer */}
+        <View
+          style={{
+            position: 'absolute',
+            top: -8,
+            right: 24,
+            width: 16,
+            height: 16,
+            backgroundColor: 'white',
+            transform: [{ rotate: '45deg' }],
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 5,
+          }}
+        />
+      </Animated.View>
     </Modal>
   );
 }
