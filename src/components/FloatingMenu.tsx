@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MenuModal from './MenuModal';
 
 interface FloatingMenuProps {
-  onNavigate: (screen: 'guidelines' | 'greens_tracker' | 'scanner') => void;
+  onNavigate: (screen: 'guidelines' | 'greens_tracker' | 'scanner' | 'history') => void;
 }
 
 export default function FloatingMenu({ onNavigate }: FloatingMenuProps) {
@@ -38,7 +38,7 @@ export default function FloatingMenu({ onNavigate }: FloatingMenuProps) {
     setIsMenuVisible(false);
   };
 
-  const handleMenuSelect = async (option: 'guidelines' | 'greens_tracker' | 'scanner') => {
+  const handleMenuSelect = async (option: 'guidelines' | 'greens_tracker' | 'scanner' | 'history') => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsMenuVisible(false);
     onNavigate(option);

@@ -8,6 +8,7 @@ import FoodAnalyzerScreen from './FoodAnalyzerScreen';
 import SubscriptionScreen from './SubscriptionScreen';
 import GuidelinesScreen from './GuidelinesScreen';
 import GreensTrackerScreen from './GreensTrackerScreen';
+import GreensHistoryScreen from './GreensHistoryScreen';
 
 type Screen = 'new_welcome' | 'medical_agreement' | 'main_menu' | 'scan_selection' | 'camera' | 'subscription' | 'guidelines' | 'greens_tracker' | 'greens_history';
 
@@ -109,11 +110,8 @@ export default function MainNavigator() {
   }
 
   if (currentScreen === 'greens_history') {
-    // TODO: Create GreensHistoryScreen
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Greens History Screen - Coming Soon!</Text>
-      </View>
+      <GreensHistoryScreen />
     );
   }
 

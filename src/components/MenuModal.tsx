@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 interface MenuModalProps {
   visible: boolean;
   onClose: () => void;
-  onSelect: (option: 'guidelines' | 'greens_tracker' | 'scanner') => void;
+  onSelect: (option: 'guidelines' | 'greens_tracker' | 'scanner' | 'history') => void;
 }
 
 export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps) {
@@ -58,7 +58,7 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
     }
   }, [visible]);
 
-  const handleOptionPress = async (option: 'guidelines' | 'greens_tracker' | 'scanner') => {
+  const handleOptionPress = async (option: 'guidelines' | 'greens_tracker' | 'scanner' | 'history') => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onSelect(option);
   };
@@ -84,6 +84,13 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
       subtitle: 'Track your 6 servings',
       icon: 'leaf-outline',
       color: '#27AE60',
+    },
+    {
+      id: 'history' as const,
+      title: 'History',
+      subtitle: 'View your progress',
+      icon: 'stats-chart-outline',
+      color: '#9B59B6',
     },
   ];
 
