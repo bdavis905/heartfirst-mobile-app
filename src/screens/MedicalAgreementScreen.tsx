@@ -101,24 +101,34 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
 
   const medicalPoints = [
     {
-      title: "Educational Purpose Only",
-      content: "This app provides educational information about food choices and is not a substitute for professional medical advice, diagnosis, or treatment.",
-      icon: "school-outline"
+      title: "Not Medical Advice",
+      content: "This application is for educational and informational purposes only. It does not provide medical advice, diagnosis, or treatment. The food analysis and nutritional information provided should not replace professional medical consultation.",
+      icon: "information-circle-outline"
     },
     {
-      title: "Consult Your Doctor",
-      content: "Always consult with your healthcare provider before making significant dietary changes, especially if you have existing health conditions or take medications.",
+      title: "Consult Healthcare Professionals",
+      content: "Before making any dietary changes, especially if you have heart disease, diabetes, high blood pressure, or other medical conditions, consult with your physician, registered dietitian, or other qualified healthcare provider.",
       icon: "medical-outline"
     },
     {
-      title: "Individual Results May Vary",
-      content: "The effectiveness of dietary interventions can vary between individuals. What works for one person may not work for another.",
+      title: "Individual Results Vary",
+      content: "Dietary interventions affect individuals differently. Results may vary based on genetics, lifestyle, medical history, and adherence to recommendations. What works for one person may not be suitable for another.",
       icon: "people-outline"
     },
     {
-      title: "Emergency Situations",
-      content: "If you experience chest pain, shortness of breath, or other emergency symptoms, seek immediate medical attention. Do not rely on this app for emergency medical guidance.",
+      title: "Emergency Medical Situations",
+      content: "If you experience chest pain, shortness of breath, severe headache, or other medical emergencies, seek immediate professional medical attention. Do not rely on this app for emergency medical guidance.",
       icon: "alert-circle-outline"
+    },
+    {
+      title: "Food Analysis Limitations",
+      content: "Food analysis results are based on available nutritional databases and may not be 100% accurate. Always read food labels and verify nutritional information independently.",
+      icon: "search-outline"
+    },
+    {
+      title: "Dr. Esselstyn's Protocol",
+      content: "This app references Dr. Caldwell Esselstyn's plant-based nutrition approach. While supported by research, it represents one dietary strategy among many. Individual medical needs may require different approaches.",
+      icon: "leaf-outline"
     }
   ];
 
@@ -154,7 +164,7 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
         className="absolute inset-0 bg-black/50"
       />
       
-      <View className="flex-1 justify-end">
+      <View className="flex-1 justify-center items-center px-4">
         <Animated.View
           style={{
             transform: [
@@ -163,18 +173,24 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
               },
             ],
           }}
-          className="bg-background-primary rounded-t-16dp max-h-[85%]"
+          className="bg-background-primary rounded-20dp w-full max-w-lg max-h-[90%] shadow-2xl"
         >
           {/* Header */}
-          <View className="flex-row items-center justify-between p-20dp border-b border-background-tertiary">
-            <View className="flex-1">
-              <Text className="text-h2 font-semibold text-text-primary">
-                Important Medical Information
-              </Text>
+          <View className="p-24dp border-b border-background-tertiary">
+            <View className="flex-row items-center justify-between mb-4">
+              <View className="w-12 h-12 bg-secondary-green-pale rounded-full items-center justify-center">
+                <Ionicons name="medical" size={24} color="#16A085" />
+              </View>
+              <Pressable onPress={handleClose} className="w-10 h-10 items-center justify-center">
+                <Ionicons name="close" size={24} color="#7F8C8D" />
+              </Pressable>
             </View>
-            <Pressable onPress={handleClose} className="w-8 h-8 items-center justify-center">
-              <Ionicons name="close" size={24} color="#7F8C8D" />
-            </Pressable>
+            <Text className="text-h1 font-semibold text-text-primary mb-2">
+              Medical Disclaimer
+            </Text>
+            <Text className="text-body-regular text-text-secondary">
+              Important information about using this health app
+            </Text>
           </View>
 
           {/* Progress Bar */}
@@ -192,23 +208,26 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
             scrollEventThrottle={16}
             showsVerticalScrollIndicator={false}
           >
-            <View className="py-20dp">
-              <Text className="text-body-large text-text-secondary mb-24dp">
-                Please read and understand the following important information before using this application.
+            <View className="py-24dp">
+              <Text className="text-body-large text-text-secondary mb-24dp text-center">
+                Please read and acknowledge the following medical disclaimer before using this application.
               </Text>
 
               {medicalPoints.map((point, index) => (
                 <View key={index} className="mb-16dp">
                   <Pressable
                     onPress={() => toggleSection(index)}
-                    className="flex-row items-center p-16dp bg-background-secondary rounded-12dp border border-info/20"
+                    className="flex-row items-start p-16dp bg-background-secondary rounded-12dp border border-background-tertiary"
                   >
-                    <View className="w-10 h-10 bg-info/10 rounded-full items-center justify-center mr-12dp">
-                      <Ionicons name={point.icon as any} size={20} color="#3498DB" />
+                    <View className="w-10 h-10 bg-primary-green/10 rounded-full items-center justify-center mr-12dp mt-1">
+                      <Ionicons name={point.icon as any} size={18} color="#16A085" />
                     </View>
                     <View className="flex-1">
-                      <Text className="text-h4 font-medium text-text-primary">
+                      <Text className="text-h4 font-medium text-text-primary mb-1">
                         {point.title}
+                      </Text>
+                      <Text className="text-body-small text-text-secondary">
+                        Tap to {expandedSections.includes(index) ? 'hide' : 'read'} details
                       </Text>
                     </View>
                     <Ionicons 
@@ -219,7 +238,7 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
                   </Pressable>
                   
                   {expandedSections.includes(index) && (
-                    <View className="mt-8dp px-16dp">
+                    <View className="mt-8dp px-16dp py-12dp bg-background-primary rounded-8dp border-l-4 border-primary-green">
                       <Text className="text-body-regular text-text-secondary leading-relaxed">
                         {point.content}
                       </Text>
@@ -228,21 +247,24 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
                 </View>
               ))}
 
-              <View className="bg-secondary-green-pale rounded-12dp p-16dp mt-24dp">
-                <Text className="text-h4 font-medium text-text-primary mb-8dp">
-                  Your Health Journey
-                </Text>
-                <Text className="text-body-regular text-text-secondary">
-                  This app is designed to support your health goals by providing information about food choices that align with heart-healthy eating patterns. Use it as a tool to make informed decisions alongside professional medical guidance.
+              <View className="bg-gradient-to-r from-secondary-green-pale to-primary-green/10 rounded-16dp p-20dp mt-24dp">
+                <View className="flex-row items-center mb-12dp">
+                  <Ionicons name="heart" size={20} color="#16A085" />
+                  <Text className="text-h4 font-semibold text-text-primary ml-8dp">
+                    Your Health Journey
+                  </Text>
+                </View>
+                <Text className="text-body-regular text-text-secondary leading-relaxed">
+                  This app supports your wellness goals by providing educational information about heart-healthy food choices based on Dr. Esselstyn's plant-based approach. Use it as a helpful tool alongside professional medical guidance for optimal health outcomes.
                 </Text>
               </View>
 
-              <View className="h-24" />
+              <View className="h-32" />
             </View>
           </ScrollView>
 
           {/* Bottom Action */}
-          <View className="p-20dp border-t border-background-tertiary">
+          <View className="p-24dp border-t border-background-tertiary">
             <Animated.View
               style={{
                 opacity: buttonAnimation,
@@ -256,7 +278,7 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
               <Pressable
                 onPress={handleAccept}
                 disabled={!isBottomReached}
-                className="rounded-full items-center justify-center"
+                className="rounded-full items-center justify-center flex-row"
                 style={{
                   height: 56,
                   backgroundColor: isBottomReached ? '#16A085' : '#ECF0F1',
@@ -267,6 +289,12 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
                   elevation: isBottomReached ? 8 : 0,
                 }}
               >
+                <Ionicons 
+                  name="checkmark-circle" 
+                  size={20} 
+                  color={isBottomReached ? '#FFFFFF' : '#95A5A6'}
+                  style={{ marginRight: 8 }}
+                />
                 <Text 
                   className="font-semibold"
                   style={{
@@ -276,14 +304,14 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
                     letterSpacing: 0.1,
                   }}
                 >
-                  I Understand
+                  I Acknowledge & Understand
                 </Text>
               </Pressable>
             </Animated.View>
             
             {!isBottomReached && (
               <Text 
-                className="text-center mt-2"
+                className="text-center mt-3"
                 style={{
                   color: '#95A5A6',
                   fontSize: 12,
@@ -291,7 +319,7 @@ export default function MedicalAgreementScreen({ onAccept, onClose }: MedicalAgr
                   letterSpacing: 0.2,
                 }}
               >
-                Please read the information above (button enables automatically)
+                Please review the disclaimer above • Button activates automatically
               </Text>
             )}
           </View>
