@@ -23,6 +23,10 @@ interface GreensTrackerState {
   dailyGoal: number;
   servings: GreensServing[];
   
+  // Schedule settings
+  startTime: string; // Format: "HH:MM"
+  endTime: string;   // Format: "HH:MM"
+  
   // Historical data
   history: Record<string, DailyGreensData>;
   
@@ -30,6 +34,7 @@ interface GreensTrackerState {
   initializeDay: (date: string) => void;
   addServing: (type?: string) => void;
   toggleServing: (servingId: string) => void;
+  updateSchedule: (startTime: string, endTime: string) => void;
   getProgressPercentage: () => number;
   getCompletedServings: () => number;
   getTodaysData: () => DailyGreensData;
@@ -37,21 +42,44 @@ interface GreensTrackerState {
   resetDay: () => void;
 }
 
-const generateDefaultServings = (): GreensServing[] => {
-  const times = [
-    '7:00 AM',   // Morning
-    '10:00 AM',  // Mid-morning
-    '1:00 PM',   // Lunch
-    '4:00 PM',   // Afternoon
-    '7:00 PM',   // Dinner
-    '9:00 PM',   // Evening
-  ];
+const generateServingsFromSchedule = (startTime: string, endTime: string): GreensServing[] => {
+  // Parse start and end times
+  const parseTime = (timeStr: string) => {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + minutes; // Convert to minutes from midnight
+  };
+
+  const formatTime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+    return `${displayHours}:${mins.toString().padStart(2, '0')} ${period}`;
+  };
+
+  const startMinutes = parseTime(startTime);
+  const endMinutes = parseTime(endTime);
+  
+  // Calculate interval between servings (divide the time span by 5 to get 6 total servings)
+  const totalSpan = endMinutes - startMinutes;
+  const interval = totalSpan / 5; // 5 intervals for 6 servings
+  
+  const times: string[] = [];
+  for (let i = 0; i < 6; i++) {
+    const servingTime = startMinutes + (interval * i);
+    times.push(formatTime(Math.round(servingTime)));
+  }
 
   return times.map((time, index) => ({
     id: `serving-${index + 1}`,
     time,
     completed: false,
   }));
+};
+
+const generateDefaultServings = (): GreensServing[] => {
+  // Default schedule: 7:00 AM to 9:00 PM
+  return generateServingsFromSchedule('07:00', '21:00');
 };
 
 const getTodayDateString = (): string => {
@@ -64,6 +92,8 @@ export const useGreensTrackerStore = create<GreensTrackerState>()(
       currentDate: getTodayDateString(),
       dailyGoal: 6,
       servings: generateDefaultServings(),
+      startTime: '07:00', // 7:00 AM
+      endTime: '21:00',   // 9:00 PM
       history: {},
 
       initializeDay: (date: string) => {
@@ -190,9 +220,19 @@ export const useGreensTrackerStore = create<GreensTrackerState>()(
         return weekData;
       },
 
-      resetDay: () => {
+      updateSchedule: (startTime: string, endTime: string) => {
+        const newServings = generateServingsFromSchedule(startTime, endTime);
         set({
-          servings: generateDefaultServings(),
+          startTime,
+          endTime,
+          servings: newServings,
+        });
+      },
+
+      resetDay: () => {
+        const state = get();
+        set({
+          servings: generateServingsFromSchedule(state.startTime, state.endTime),
         });
       },
     }),
