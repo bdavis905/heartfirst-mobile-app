@@ -104,6 +104,14 @@ export default function FoodAnalyzerScreen({ scanType, onBack, onSubscriptionReq
     setCapturedImage(null);
   };
 
+  const getScanTypeTitle = () => {
+    return 'Food Scanner'; // Simplified since we removed scan type selection
+  };
+
+  const getScanTypeInstructions = () => {
+    return 'Point camera at any food item';
+  };
+
 
 
   return (
