@@ -218,7 +218,7 @@ export default function GreensTrackerScreen({ navigation }: GreensTrackerScreenP
                     fontWeight: '600',
                   }}
                 >
-                  Today's Schedule
+                  Customize Schedule
                 </Text>
                 <Text
                   style={{
@@ -228,107 +228,124 @@ export default function GreensTrackerScreen({ navigation }: GreensTrackerScreenP
                     letterSpacing: 0.1,
                   }}
                 >
-                  {formatDisplayTime(startTime)} - {formatDisplayTime(endTime)}
+                  Set your daily eating window
                 </Text>
               </View>
-              <Pressable
-                onPress={handleSchedulePress}
-                style={{
-                  backgroundColor: '#16A085',
-                  paddingHorizontal: 12,
-                  paddingVertical: 6,
-                  borderRadius: 8,
-                }}
-              >
-                <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }}>
-                  Edit
-                </Text>
-              </Pressable>
             </View>
           </View>
 
           <View style={{ padding: 20 }}>
-            {servings.map((serving, index) => (
-              <Pressable
-                key={serving.id}
-                onPress={() => handleToggleServing(serving.id)}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  padding: 16,
-                  borderRadius: 12,
-                  marginBottom: index === servings.length - 1 ? 0 : 12,
-                  backgroundColor: serving.completed ? '#F0FDF4' : '#F9FAFB',
-                }}
-              >
-                <View
+            <Text style={{
+              color: '#7F8C8D',
+              fontSize: 14,
+              lineHeight: 18,
+              marginBottom: 20,
+              textAlign: 'center',
+            }}>
+              The 6 servings will be evenly spaced throughout your eating window
+            </Text>
+
+            <View style={{ 
+              flexDirection: 'row', 
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 16
+            }}>
+              {/* Start Time Input */}
+              <View style={{ flex: 1 }}>
+                <Text style={{
+                  color: '#2C3E50',
+                  fontSize: 14,
+                  fontWeight: '500',
+                  marginBottom: 8,
+                  textAlign: 'center',
+                }}>
+                  Start Time
+                </Text>
+                <Pressable
+                  onPress={() => setShowScheduleModal(true)}
                   style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 16,
+                    borderWidth: 1,
+                    borderColor: '#16A085',
+                    borderRadius: 12,
+                    padding: 16,
+                    backgroundColor: '#F0FDF4',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    marginRight: 16,
-                    backgroundColor: serving.completed ? '#22C55E' : '#9CA3AF',
                   }}
                 >
-                  {serving.completed ? (
-                    <Ionicons name="checkmark" size={18} color="white" />
-                  ) : (
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontSize: 12,
-                        fontWeight: '600',
-                      }}
-                    >
-                      {index + 1}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={{ flex: 1 }}>
-                  <Text
-                    style={{
-                      color: serving.completed ? '#16A34A' : '#2C3E50',
-                      fontSize: 16,
-                      lineHeight: 20,
-                      fontWeight: '500',
-                    }}
-                  >
-                    Serving {index + 1}
+                  <Text style={{
+                    color: '#16A085',
+                    fontSize: 16,
+                    fontWeight: '600',
+                  }}>
+                    {formatDisplayTime(startTime)}
                   </Text>
-                  <Text
-                    style={{
-                      color: serving.completed ? '#15803D' : '#7F8C8D',
-                      fontSize: 14,
-                      lineHeight: 18,
-                    }}
-                  >
-                    {serving.time}
-                  </Text>
-                </View>
+                </Pressable>
+              </View>
 
-                <View style={{ alignItems: 'center' }}>
-                  {serving.completed ? (
-                    <View style={{ alignItems: 'center' }}>
-                      <Ionicons name="leaf" size={20} color="#16A34A" />
-                      <Text
-                        style={{
-                          color: '#15803D',
-                          fontSize: 10,
-                          marginTop: 2,
-                        }}
-                      >
-                        Done
-                      </Text>
-                    </View>
-                  ) : (
-                    <Ionicons name="chevron-forward" size={16} color="#95A5A6" />
-                  )}
-                </View>
-              </Pressable>
-            ))}
+              {/* Separator */}
+              <View style={{
+                width: 30,
+                alignItems: 'center',
+                marginTop: 20,
+              }}>
+                <Text style={{
+                  color: '#7F8C8D',
+                  fontSize: 14,
+                  fontWeight: '500',
+                }}>
+                  to
+                </Text>
+              </View>
+
+              {/* End Time Input */}
+              <View style={{ flex: 1 }}>
+                <Text style={{
+                  color: '#2C3E50',
+                  fontSize: 14,
+                  fontWeight: '500',
+                  marginBottom: 8,
+                  textAlign: 'center',
+                }}>
+                  End Time
+                </Text>
+                <Pressable
+                  onPress={() => setShowScheduleModal(true)}
+                  style={{
+                    borderWidth: 1,
+                    borderColor: '#16A085',
+                    borderRadius: 12,
+                    padding: 16,
+                    backgroundColor: '#F0FDF4',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{
+                    color: '#16A085',
+                    fontSize: 16,
+                    fontWeight: '600',
+                  }}>
+                    {formatDisplayTime(endTime)}
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+
+            <View style={{
+              backgroundColor: '#E8F8F5',
+              borderRadius: 8,
+              padding: 12,
+              marginTop: 16,
+            }}>
+              <Text style={{
+                color: '#16A085',
+                fontSize: 12,
+                textAlign: 'center',
+                fontWeight: '500',
+              }}>
+                Current eating window: {formatDisplayTime(startTime)} - {formatDisplayTime(endTime)}
+              </Text>
+            </View>
           </View>
         </View>
 
