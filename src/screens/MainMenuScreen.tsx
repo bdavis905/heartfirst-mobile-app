@@ -10,7 +10,7 @@ interface MainMenuScreenProps {
   navigation: any;
 }
 
-type MenuNavigationType = 'guidelines' | 'greens_tracker' | 'scanner' | 'history';
+type MenuNavigationType = 'guidelines' | 'greens_tracker' | 'home' | 'history';
 
 export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
   const insets = useSafeAreaInsets();
@@ -24,9 +24,15 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
     const screenMapping = {
       'guidelines': 'Guidelines',
       'greens_tracker': 'GreensTracker', 
-      'scanner': 'FoodAnalyzer',
+      'home': 'Home', // This will stay on main menu
       'history': 'GreensHistory'
     };
+    
+    if (screen === 'home') {
+      // Already on main menu, do nothing or close menu
+      return;
+    }
+    
     navigation.navigate(screenMapping[screen]);
   };
 
@@ -189,7 +195,7 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
               marginTop: 4,
               textAlign: 'center'
             }}>
-              Analyze your meals for heart health
+              Open camera to scan any food item
             </Text>
           </View>
         </Pressable>

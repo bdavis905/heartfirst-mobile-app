@@ -11,7 +11,7 @@ import GuidelinesScreen from './GuidelinesScreen';
 import GreensTrackerScreen from './GreensTrackerScreen';
 import GreensHistoryScreen from './GreensHistoryScreen';
 
-type Screen = 'new_welcome' | 'medical_agreement' | 'main_menu' | 'scan_selection' | 'camera' | 'subscription' | 'guidelines' | 'greens_tracker' | 'greens_history';
+type Screen = 'new_welcome' | 'medical_agreement' | 'main_menu' | 'camera' | 'subscription' | 'guidelines' | 'greens_tracker' | 'greens_history';
 
 export default function MainNavigator() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('new_welcome');
@@ -30,13 +30,15 @@ export default function MainNavigator() {
     setCurrentScreen('new_welcome');
   };
 
-  const handleScanTypeSelect = (type: ScanType) => {
-    setSelectedScanType(type);
+  // Simplified - no scan type selection needed, default to food_label
+  const handleScanTypeSelect = () => {
+    setSelectedScanType('food_label');
     setCurrentScreen('camera');
   };
 
   const handleBackToScanSelection = () => {
-    setCurrentScreen('scan_selection');
+    // Go back to main menu instead of scan selection
+    setCurrentScreen('main_menu');
   };
 
   const handleSubscriptionRequired = () => {
@@ -57,7 +59,8 @@ export default function MainNavigator() {
         setCurrentScreen('guidelines');
         break;
       case 'FoodAnalyzer':
-        setCurrentScreen('scan_selection');
+        // Go directly to camera instead of scan selection
+        setCurrentScreen('camera');
         break;
       case 'GreensTracker':
         setCurrentScreen('greens_tracker');
@@ -119,14 +122,7 @@ export default function MainNavigator() {
     );
   }
 
-  if (currentScreen === 'scan_selection') {
-    return (
-      <WelcomeScreen 
-        onScanTypeSelect={handleScanTypeSelect}
-        navigation={{ goBack: handleBackToMainMenu }}
-      />
-    );
-  }
+  // Removed scan_selection screen - now goes directly to camera
 
   if (currentScreen === 'subscription') {
     return (

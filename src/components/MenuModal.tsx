@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 interface MenuModalProps {
   visible: boolean;
   onClose: () => void;
-  onSelect: (option: 'guidelines' | 'greens_tracker' | 'scanner' | 'history') => void;
+  onSelect: (option: 'guidelines' | 'greens_tracker' | 'home' | 'history') => void;
 }
 
 export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps) {
@@ -58,7 +58,7 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
     }
   }, [visible]);
 
-  const handleOptionPress = async (option: 'guidelines' | 'greens_tracker' | 'scanner' | 'history') => {
+  const handleOptionPress = async (option: 'guidelines' | 'greens_tracker' | 'home' | 'history') => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onSelect(option);
   };
@@ -72,10 +72,10 @@ export default function MenuModal({ visible, onClose, onSelect }: MenuModalProps
       color: '#3498DB',
     },
     {
-      id: 'scanner' as const,
-      title: 'Food Scanner',
-      subtitle: 'Analyze food items',
-      icon: 'camera-outline',
+      id: 'home' as const,
+      title: 'Home',
+      subtitle: 'Back to main menu',
+      icon: 'home-outline',
       color: '#16A085',
     },
     {
