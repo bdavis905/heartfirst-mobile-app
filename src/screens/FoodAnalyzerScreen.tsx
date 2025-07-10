@@ -172,6 +172,13 @@ export default function FoodAnalyzerScreen({ scanType, onBack, onSubscriptionReq
           </View>
         </View>
       </CameraView>
+
+      {/* Image Chat Modal */}
+      <ImageChatModal 
+        visible={showImageChat}
+        imageUri={capturedImage}
+        onClose={handleImageChatClose}
+      />
     </View>
   );
 }
