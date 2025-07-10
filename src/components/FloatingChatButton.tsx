@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View, Pressable, Animated, useRef, useEffect } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Pressable } from 'react-native';
+import { Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import ChatModal from './ChatModal';
