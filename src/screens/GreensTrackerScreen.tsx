@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useGreensTrackerStore } from '../state/greensTrackerStore';
 import GreensRingProgress from '../components/GreensRingProgress';
+import FloatingChatButton from '../components/FloatingChatButton';
 
 interface GreensTrackerScreenProps {
   navigation?: {
@@ -45,6 +46,9 @@ export default function GreensTrackerScreen({ navigation }: GreensTrackerScreenP
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F9FA' }}>
+      {/* Floating Chat Button */}
+      <FloatingChatButton />
+      
       {/* Header */}
       <View style={{ 
         paddingTop: insets.top, 

@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSubscriptionStore } from '../state/subscriptionStore';
+import FloatingChatButton from '../components/FloatingChatButton';
 // import { LinearGradient } from 'expo-linear-gradient';
 
 export type ScanType = 'barcode' | 'food_label' | 'restaurant_menu';
@@ -29,6 +30,9 @@ export default function WelcomeScreen({ onScanTypeSelect, navigation }: WelcomeS
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
+      {/* Floating Chat Button */}
+      <FloatingChatButton />
+      
       <View style={{ paddingTop: insets.top, backgroundColor: 'rgba(255, 255, 255, 0.9)', borderBottomWidth: 1, borderBottomColor: '#E5E7EB' }}>
         <View style={{ 
           flexDirection: 'row', 

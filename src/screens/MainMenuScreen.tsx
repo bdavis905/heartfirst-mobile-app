@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import FloatingMenu from '../components/FloatingMenu';
+import FloatingChatButton from '../components/FloatingChatButton';
 
 interface MainMenuScreenProps {
   navigation: any;
@@ -64,6 +65,9 @@ export default function MainMenuScreen({ navigation }: MainMenuScreenProps) {
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Floating Menu */}
       <FloatingMenu onNavigate={handleFloatingMenuNavigate} />
+      
+      {/* Floating Chat Button */}
+      <FloatingChatButton />
       
       <View style={{ 
         paddingTop: insets.top, 
