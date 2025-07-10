@@ -139,7 +139,7 @@ Be supportive, specific, and educational. Always remind users to consult healthc
           'Authorization': `Bearer ${process.env.EXPO_PUBLIC_VIBECODE_OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: 'gpt-4-vision-preview',
+          model: 'gpt-4o', // Updated to current model
           messages: [
             { 
               role: 'system', 
@@ -155,8 +155,7 @@ Be supportive, specific, and educational. Always remind users to consult healthc
                 {
                   type: 'image_url',
                   image_url: {
-                    url: `data:image/jpeg;base64,${base64}`,
-                    detail: 'high'
+                    url: `data:image/jpeg;base64,${base64}`
                   }
                 }
               ]
@@ -168,8 +167,14 @@ Be supportive, specific, and educational. Always remind users to consult healthc
       });
 
       const data = await apiResponse.json();
+      
+      console.log('API Response:', data); // Debug log
 
-      if (data.choices && data.choices[0]) {
+      if (!apiResponse.ok) {
+        throw new Error(`API Error: ${data.error?.message || 'Unknown error'}`);
+      }
+
+      if (data.choices && data.choices[0] && data.choices[0].message) {
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
           text: data.choices[0].message.content,
@@ -178,17 +183,57 @@ Be supportive, specific, and educational. Always remind users to consult healthc
         };
         setMessages(prev => [...prev, aiMessage]);
       } else {
-        throw new Error('Invalid response from API');
+        console.log('Unexpected API response structure:', data);
+        throw new Error('Invalid response structure from API');
       }
     } catch (error) {
       console.error('Image Analysis Error:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: "I'm having trouble analyzing this image right now. Could you describe what you're eating, and I'll help you determine if it fits Dr. Esselstyn's protocol?",
-        isUser: false,
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      
+      // Try fallback with regular GPT-4 (no vision)
+      try {
+        const fallbackResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.EXPO_PUBLIC_VIBECODE_OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: 'gpt-4',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { 
+                role: 'user', 
+                content: 'I just took a photo of some food but the image analysis failed. Can you help me understand Dr. Esselstyn\'s protocol and what foods I should look for? Please explain the key principles and ask me to describe what I\'m eating.'
+              }
+            ],
+            max_tokens: 500,
+            temperature: 0.7,
+          }),
+        });
+
+        const fallbackData = await fallbackResponse.json();
+        
+        if (fallbackData.choices && fallbackData.choices[0]) {
+          const aiMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            text: fallbackData.choices[0].message.content,
+            isUser: false,
+            timestamp: new Date(),
+          };
+          setMessages(prev => [...prev, aiMessage]);
+        } else {
+          throw new Error('Fallback also failed');
+        }
+      } catch (fallbackError) {
+        console.error('Fallback Error:', fallbackError);
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: "I'm having trouble connecting right now, but I'm here to help! Could you describe what you're eating? I can help you determine if it fits Dr. Esselstyn's heart-healthy protocol. The key principles are: no oil, no nuts/seeds, no avocados, and focus on whole plant foods like vegetables, fruits, whole grains, and legumes.",
+          isUser: false,
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      }
     } finally {
       setIsLoading(false);
     }
