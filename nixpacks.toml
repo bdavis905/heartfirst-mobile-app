@@ -1,8 +1,12 @@
-[providers]
-node = "18.x"
+# Nixpacks configuration for Node.js app
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "npm"]
 
-[build]
+[phases.install]
 cmds = ["npm install"]
+
+[phases.build]
+cmds = ["echo 'No build step required'"]
 
 [start]
 cmd = "node server.js"
