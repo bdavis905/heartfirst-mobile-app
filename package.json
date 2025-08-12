@@ -8,9 +8,10 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "setup": "node setup.js",
-    "test": "node test-agents.js",
-    "web": "node server.js",
-    "expo": "node server.js"
+    "test": "node test-agents.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "openai": "^4.63.0",

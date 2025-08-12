@@ -1,0 +1,12 @@
+[providers]
+node = "18.x"
+
+[build]
+cmds = ["npm install"]
+
+[start]
+cmd = "node server.js"
+
+[variables]
+NODE_ENV = "production"
+PORT = "3000"
